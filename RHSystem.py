@@ -61,37 +61,12 @@ def olvidopass():
             login()
     else:
         print("Error , verifique su correo")
-
-
-#-------------------Funcion conexion la base Trabajadores---------------#
-def conexionbasetrabajadores():
-    db = pymysql.connect(
-        host="localhost",
-        user="root",
-        passwd="Halobat17.",
-        db="rhdb"
-    )
-    cur = db.cursor()
-    cur.execute("SELECT * FROM trabajadores")
-    for DNI, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary in cur.fetchall() :
-        print("\nDNI:",DNI, "\nNombre Completo:",FullName, "\nApellidos:",FullLastName, "\nFecha de Nacimiento:",Birthday, "\nUbicacion:",Location, "\nFecha de Contratacion:",DateOfHire, "\nPuesto:",Position, "\nTelefono:",Cellphone, "\nEmail:",Email, "\nSalario:",Salary,)
-
-
-#-------------------Funcion conexion la base Administradores---------------#
-def conexionbaseadmins():
-    db = pymysql.connect(
-        host="localhost",
-        user="root",
-        passwd="Halobat17.",
-        db="rhdb"
-    )
-    cur = db.cursor()
-    cur.execute("SELECT * FROM users")
-    print("Administradores")
-    for Usuario, Email in cur.fetchall() :
-        print("\nUsuario:",Usuario, "\nEmail:",Email,)
-
-
+        oprec = input("Volver a intentarlo?\nS=Si\nN=No\n")
+        if oprec.upper == "S":
+            olvidopass()
+        else:
+            login()
+            
 #-------------------Consulta Trabajadores---------------#
 def consultardatostrabajadores():
     print("Sistema Recursos Humanos\n")
@@ -101,7 +76,7 @@ def consultardatostrabajadores():
         passwd="Halobat17.",
         db="rhdb"
     )
-    opciontrabajador = int(input("{----------Menu----------}\n1.Trabajadores Disponibles\n2.Ver Datos de Trabajadores\n3.Cambiar Correo de Usuarios\n4.Enviar Correo a Trabajador\n5.Agregar Trabajador Trabajador\n6.Eiminar Trabajador\n"))
+    opciontrabajador = int(input("{----------Menu----------}\n1.Trabajadores Disponibles\n2.Ver Datos de Trabajadores\n3.Cambiar Correo de Usuarios\n4.Enviar Correo a Trabajador\n5.Agregar Trabajador Trabajador\n6.Eiminar Trabajador\n7.Salir\n"))
     #-------------------Cosnultar la Lista de trabajadores general---------------#
     if opciontrabajador == 1:
         print("Trabajadores Disponibles")
@@ -109,6 +84,7 @@ def consultardatostrabajadores():
         cur.execute("SELECT * FROM trabajadores")
         for DNI, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary in cur.fetchall() :
             print("\nDNI:",DNI, "\nNombre Completo:",FullName,FullLastName, "\nPuesto:",Position,"\nEmail:",Email,"\n")
+        consultardatostrabajadores()
     #-------------------Consultar datos trabajadores por separado---------------#
     elif opciontrabajador == 2:
         print("Ver Datos de Trabajadores")
@@ -117,6 +93,7 @@ def consultardatostrabajadores():
         cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt2+ "'")
         for row in cur.fetchall():
             print("\nCedula: ",row[0],"\nNombre Completo: ",row[1],row[2],"\nFecha de Nacimiento: ",row[3],"\nUbicacion: ",row[4],"\nFecha de Contratacion: ",row[5],"\nPuesto: ",row[6],"\nTelefono: ",row[7],"\nEmail: ",row[8],"\n")
+            consultardatostrabajadores()
     #-------------------Cambiar Correo de Trabajadores---------------#
     elif opciontrabajador == 3:
         print("Cambiar Correo de Usuarios")
@@ -148,6 +125,7 @@ def consultardatostrabajadores():
         cur.execute(updated_email, (Op1, Op2, Op3, Op4, Op5, Op6, Op7,newEmail,Op9,Op0))
         db.commit()
         print("Email Cambiado con exito , el nuevo correo es: "+newEmail)
+        consultardatostrabajadores()
     #-------------------Enviar Correo a Trabajadores---------------#
     elif opciontrabajador == 4:
         print("Enviar Correo a Trabajador")
@@ -169,14 +147,22 @@ def consultardatostrabajadores():
         smtp.login(remit, "gbaabtuzmxgxrvhn")
         smtp.sendmail(remit, desto, email.as_string())
         smtp.quit()
-        print("Correo Enviado")
+        print("Correo Enviado con Exito")
+        consultardatostrabajadores()
     #-------------------Agregar Trabajadores---------------#
     elif opciontrabajador == 5:
         print("Agregar Trabajador")
+        consultardatostrabajadores()
     #-------------------Borrar Trabajadores---------------#
     elif opciontrabajador == 6:
         print("Eliminar Trabajador")
-
+        consultardatostrabajadores()
+    elif opciontrabajador == 7:
+        print("Devolviendose: ")
+        login()
+    else:
+        print("Opcion Incorrecta\nIntente denuevo")
+        consultardatostrabajadores
 #-------------------Funcion login---------------#
 def login():
     username = input("Digite el user ")
@@ -187,11 +173,30 @@ def login():
     cursor.execute(savequery,(username,password))
     myresult = cursor.fetchall()
     if myresult: # If there is such a record, then success
-        messagebox.showinfo("LOGIN",'LOGIN SUCCESSFUL')
+        messagebox.showinfo("LOGIN Corecto",'Bienvenid@'+username)
         consultardatostrabajadores()
     else: # Wrong password
-        messagebox.showerror("LOGIN ERROR","LOGIN ERROR")
+        messagebox.showerror("LOGIN Fallido","Usuario o Pass no encontrados")
         cursor.close()
         mydb.close()
-        olvidopass()
-login()
+        cerrarinput = input("Desea cerrar recuperar el password?\nS=Si\nN=No\n")
+        if cerrarinput.upper() == "S":
+            olvidopass()
+        elif cerrarinput.upper() == "N":
+            print("Cerrando programa\nNos vemos",username)
+
+#-------------------Funcion Inicio---------------#
+def prmenust():
+    prmst = int(input("{-----------------RH SYSTEM-----------------}\n!WELCOME!\n1.Login\n2.Register\n3.Cerrar\n"))
+    if prmst == 1:
+        login()
+    elif prmst == 2:
+        print("Register")
+    elif prmst == 3:
+        print("GOODBYE")
+    else:
+        print("Digite una opcion correcta")
+        prmst()
+        
+#-------------------Llamar Funcion Principal---------------#
+prmenust()
