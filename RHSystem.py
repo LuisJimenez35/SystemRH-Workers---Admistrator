@@ -152,17 +152,50 @@ def consultardatostrabajadores():
     #-------------------Agregar Trabajadores---------------#
     elif opciontrabajador == 5:
         print("Agregar Trabajador")
-        consultardatostrabajadores()
+        curs = db.cursor()
+        insert_stmt = (
+        "INSERT INTO trabajadores(DNI, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary)"
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        )
+        in0 = int(input("Digite la Cedula: "))
+        in1 = input("Digite el Nombre Completo: ")
+        in2 = input("Digite los Apellidos Completos: ")
+        in3 = input("Digte la Fecha de Nacimento con el Formato 0/0/0: ")
+        in4 = input("Digite la Ubicacion: ")
+        in5 = input("Digite la Fecha de contratacion con el Formato 0/0/0: ")
+        in6 = input("Digite el Titulo: ")
+        in7 = input("Digite el Telefono")
+        in8 = input("Digite el Correo")
+        data = (in0, in1, in2, in3, in4, in5, in6, in7, in8, 0)
+        try:
+            curs.execute(insert_stmt, data)
+            db.commit()
+            consultardatostrabajadores()
+        except:
+            db.rollback()          
     #-------------------Borrar Trabajadores---------------#
     elif opciontrabajador == 6:
         print("Eliminar Trabajador")
-        consultardatostrabajadores()
+        cursor = db.cursor()
+        sql_Delete_query = """Delete from trabajadores where DNI = %s"""
+        # row to delete
+        DNIinput = input("Digite la cedula del trabajador: ")
+        cursor.execute(sql_Delete_query, (DNIinput,))
+        db.commit()
+        print("Record Deleted successfully ")
+        if db:
+            messagebox.showinfo("Accept",'Se elimino a '+DNIinput)
+            consultardatostrabajadores()
+        else:
+            messagebox.showinfo("Deny",'No se encontro a '+DNIinput)
+            consultardatostrabajadores()
     elif opciontrabajador == 7:
         print("Devolviendose: ")
-        login()
+        prmenust()
     else:
         print("Opcion Incorrecta\nIntente denuevo")
-        consultardatostrabajadores
+        opciontrabajador()
+        
 #-------------------Funcion login---------------#
 def login():
     username = input("Digite el user ")
@@ -196,7 +229,7 @@ def prmenust():
         print("GOODBYE")
     else:
         print("Digite una opcion correcta")
-        prmst()
+        prmenust()
         
 #-------------------Llamar Funcion Principal---------------#
 prmenust()
