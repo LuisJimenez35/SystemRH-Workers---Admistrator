@@ -153,9 +153,9 @@ def consultardatostrabajadores():
         for row in cur.fetchall():
             print("\nCedula: ",row[0],"\nNombre Completo: ",row[1],row[2],"\nFecha de Nacimiento: ",row[3],"\nUbicacion: ",row[4],"\nFecha de Contratacion: ",row[5],"\nPuesto: ",row[6],"\nTelefono: ",row[7],"\nEmail: ",row[8],"\n")
             consultardatostrabajadores()
-    #-------------------Cambiar Correo de Trabajadores---------------#
+    #-------------------Cambiar Datos de Trabajadores---------------#
     elif opciontrabajador == 3:
-        print("Cambiar Correo de Usuarios")
+        print("Cambiar Datos de Trabajadores")
         inputOt3 = input("Digite la Cedula del Trabajador ")
         cur = db.cursor()
         cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt3+ "'")
@@ -164,11 +164,11 @@ def consultardatostrabajadores():
             Op1 = row[1]
             Op2 = row[2]
             Op3 = row[3]
-            Op4 = row[4]
             Op5 = row[5]
-            Op6 = row[6]
-            Op7 = row[7]
             Op9 = row[9]
+        newlocation = input("Digite la nueva Ubicacion ")
+        newposition = input("Digite el nuevo titulo ")
+        newcelllphone = input("Digite el nuevo Telefono ")
         newEmail = input("Digite el nuevo Email ")
         updated_email = """UPDATE trabajadores
                             SET FullName = %s,
@@ -181,9 +181,9 @@ def consultardatostrabajadores():
                                 Email = %s,
                                 Salary = %s
                             WHERE DNI = %s;"""
-        cur.execute(updated_email, (Op1, Op2, Op3, Op4, Op5, Op6, Op7,newEmail,Op9,Op0))
+        cur.execute(updated_email, (Op1, Op2, Op3, newlocation, Op5, newposition, newcelllphone, newEmail,Op9,Op0))
         db.commit()
-        print("Email Cambiado con exito , el nuevo correo es: "+newEmail)
+        messagebox.showinfo("Actualizacion de datos","Los datos fueron actualizados con exito")
         consultardatostrabajadores()
     #-------------------Enviar Correo a Trabajadores---------------#
     elif opciontrabajador == 4:
@@ -257,3 +257,32 @@ def consultardatostrabajadores():
                 
 #-------------------Llamar Funcion Principal---------------#
 prmenust()
+
+"""(Sistema de Salarios (Planeando Agregarlo))
+    Bach = 280000
+    Lic = 360000
+    Mast = 450000
+    Doc = 510000
+
+    Levbel = input("Digite el nivel: ")
+    if Levbel == "Bach":
+        Falinput = int(input("Digite las faltas: "))
+        calc = 18600 * Falinput
+        Resf = Bach - calc
+        print("Su pago es: ",Resf)
+    elif Levbel == "Lic":
+        Falinput = int(input("Digite las faltas: "))
+        calc = 24000 * Falinput
+        Resf = Lic - calc
+        print("Su pago es: ",Resf)
+    elif Levbel == "Mast":
+        Falinput = int(input("Digite las faltas: "))
+        calc = 30000 * Falinput
+        Resf = Mast - calc
+        print("Su pago es: ",Resf)
+    elif Levbel == "Doc":
+        Falinput = int(input("Digite las faltas: "))
+        calc = 34000 * Falinput
+        Resf = Mast - calc
+        print("Su pago es: ",Resf)
+"""
