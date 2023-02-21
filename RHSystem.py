@@ -135,7 +135,7 @@ def consultardatostrabajadores():
         passwd="Halobat17.",
         db="rhdb"
     )
-    opciontrabajador = int(input("{----------Menu----------}\n1.Trabajadores Disponibles\n2.Ver Datos de Trabajadores\n3.Cambiar Correo de Usuarios\n4.Enviar Correo a Trabajador\n5.Agregar Trabajador Trabajador\n6.Eiminar Trabajador\n7.Salir\n"))
+    opciontrabajador = int(input("{----------Menu----------}\n1.Trabajadores Disponibles\n2.Ver Datos de Trabajadores\n3.Cambiar Correo de Usuarios\n4.Enviar Correo a Trabajador\n5.Agregar Trabajador Trabajador\n6.Eiminar Trabajador\n7.Pago Trabajadores\n8.Salir\n"))
     #-------------------Cosnultar la Lista de trabajadores general---------------#
     if opciontrabajador == 1:
         print("Trabajadores Disponibles")
@@ -151,7 +151,7 @@ def consultardatostrabajadores():
         cur = db.cursor()
         cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt2+ "'")
         for row in cur.fetchall():
-            print("\nCedula: ",row[0],"\nNombre Completo: ",row[1],row[2],"\nFecha de Nacimiento: ",row[3],"\nUbicacion: ",row[4],"\nFecha de Contratacion: ",row[5],"\nPuesto: ",row[6],"\nTelefono: ",row[7],"\nEmail: ",row[8],"\n")
+            print("\nCedula: ",row[0],"\nNombre Completo: ",row[1],row[2],"\nFecha de Nacimiento: ",row[3],"\nUbicacion: ",row[4],"\nFecha de Contratacion: ",row[5],"\nPuesto: ",row[6],"\nTelefono: ",row[7],"\nEmail: ",row[8],"\nSalario: ",row[9],"\n")
             consultardatostrabajadores()
     #-------------------Cambiar Datos de Trabajadores---------------#
     elif opciontrabajador == 3:
@@ -249,6 +249,105 @@ def consultardatostrabajadores():
             messagebox.showinfo("Deny",'No se encontro a '+DNIinput)
             consultardatostrabajadores()
     elif opciontrabajador == 7:
+        print("Pago Quincenal: ")
+        Bach = 280000
+        Lic = 360000
+        Mast = 450000
+        Doc = 510000
+        inputOt3 = input("Digite la Cedula del Trabajador ")
+        cur = db.cursor()
+        cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt3+ "'")
+        for row in cur.fetchall():
+            Op0 = row[0]
+            Op1 = row[1]
+            Op2 = row[2]
+            Op3 = row[3]
+            Op4 = row[4]
+            Op5 = row[5]
+            Op6 = row[6]
+            Op7 = row[7]
+            Op8 = row[8]
+            Op9 = row[9]
+        if Op6 == "Bach":
+            Falinput = int(input("Digite las faltas: "))
+            calc = 18600 * Falinput
+            Resf = Bach - calc
+            updated_pay = """UPDATE trabajadores
+                            SET FullName = %s,
+                                FullLastName = %s,
+                                Birthday = %s,
+                                Location = %s,
+                                DateOfHire = %s,
+                                Position = %s,
+                                Cellphone = %s,
+                                Email = %s,
+                                Salary = %s
+                            WHERE DNI = %s;"""
+            cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
+            db.commit()
+            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            consultardatostrabajadores()
+        elif Op6 == "Lic":
+            Falinput = int(input("Digite las faltas: "))
+            calc = 24000 * Falinput
+            Resf = Lic - calc
+            updated_pay = """UPDATE trabajadores
+                            SET FullName = %s,
+                                FullLastName = %s,
+                                Birthday = %s,
+                                Location = %s,
+                                DateOfHire = %s,
+                                Position = %s,
+                                Cellphone = %s,
+                                Email = %s,
+                                Salary = %s
+                            WHERE DNI = %s;"""
+            cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
+            db.commit()
+            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            consultardatostrabajadores()
+            print("Su pago es: ",Resf)
+        elif Op6 == "Mast":
+            Falinput = int(input("Digite las faltas: "))
+            calc = 30000 * Falinput
+            Resf = Mast - calc
+            updated_pay = """UPDATE trabajadores
+                            SET FullName = %s,
+                                FullLastName = %s,
+                                Birthday = %s,
+                                Location = %s,
+                                DateOfHire = %s,
+                                Position = %s,
+                                Cellphone = %s,
+                                Email = %s,
+                                Salary = %s
+                            WHERE DNI = %s;"""
+            cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
+            db.commit()
+            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            consultardatostrabajadores()
+            print("Su pago es: ",Resf)
+        elif Op6 == "Doc":
+            Falinput = int(input("Digite las faltas: "))
+            calc = 34000 * Falinput
+            Resf = Doc - calc
+            updated_pay = """UPDATE trabajadores
+                            SET FullName = %s,
+                                FullLastName = %s,
+                                Birthday = %s,
+                                Location = %s,
+                                DateOfHire = %s,
+                                Position = %s,
+                                Cellphone = %s,
+                                Email = %s,
+                                Salary = %s
+                            WHERE DNI = %s;"""
+            cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
+            db.commit()
+            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            consultardatostrabajadores()
+            print("Su pago es: ",Resf)
+    elif opciontrabajador == 8:
         print("Devolviendose: ")
         prmenust()
     else:
@@ -258,31 +357,4 @@ def consultardatostrabajadores():
 #-------------------Llamar Funcion Principal---------------#
 prmenust()
 
-"""(Sistema de Salarios (Planeando Agregarlo))
-    Bach = 280000
-    Lic = 360000
-    Mast = 450000
-    Doc = 510000
 
-    Levbel = input("Digite el nivel: ")
-    if Levbel == "Bach":
-        Falinput = int(input("Digite las faltas: "))
-        calc = 18600 * Falinput
-        Resf = Bach - calc
-        print("Su pago es: ",Resf)
-    elif Levbel == "Lic":
-        Falinput = int(input("Digite las faltas: "))
-        calc = 24000 * Falinput
-        Resf = Lic - calc
-        print("Su pago es: ",Resf)
-    elif Levbel == "Mast":
-        Falinput = int(input("Digite las faltas: "))
-        calc = 30000 * Falinput
-        Resf = Mast - calc
-        print("Su pago es: ",Resf)
-    elif Levbel == "Doc":
-        Falinput = int(input("Digite las faltas: "))
-        calc = 34000 * Falinput
-        Resf = Mast - calc
-        print("Su pago es: ",Resf)
-"""
