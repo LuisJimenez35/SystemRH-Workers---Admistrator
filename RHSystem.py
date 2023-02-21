@@ -3,7 +3,42 @@ import pymysql
 from email.message import EmailMessage
 import smtplib
 import messagebox
-
+#-------------------Funcion Inicio---------------#
+def prmenust():
+    prmst = int(input("{-----------------RH SYSTEM-----------------}\n!WELCOME!\n1.Login\n2.Register\n3.Cerrar\n"))
+    if prmst == 1:
+        login()
+    elif prmst == 2:
+        print("Register")
+        registeruser()
+    elif prmst == 3:
+        print("GOODBYE")
+    else:
+        print("Digite una opcion correcta")
+        prmenust()
+      
+#-------------------Funcion login---------------#
+def login():
+    username = input("Digite el user ")
+    password = input("Digite el pass: ")
+    mydb = pymysql.connect(host="localhost",user="root",passwd="Halobat17.",database="rhdb")
+    cursor = mydb.cursor()
+    savequery = "SELECT * FROM users WHERE Usuario=%s AND Pass=%s" # Get the records with these username and password ONLY
+    cursor.execute(savequery,(username,password))
+    myresult = cursor.fetchall()
+    if myresult:
+        messagebox.showinfo("LOGIN Corecto",'Bienvenid@'+username)
+        consultardatostrabajadores()
+    else: 
+        messagebox.showerror("LOGIN Fallido","Usuario o Pass no encontrados")
+        cursor.close()
+        mydb.close()
+        cerrarinput = input("Desea cerrar recuperar el password?\nS=Si\nN=No\n")
+        if cerrarinput.upper() == "S":
+            olvidopass()
+        elif cerrarinput.upper() == "N":
+            print("Cerrando programa\nNos vemos",username)
+              
 #----------------Funcion para crear nueva contraseña-----------------
 def olvidopass():
     print("Sistema para cambiar contraseña:\n")
@@ -66,7 +101,31 @@ def olvidopass():
             olvidopass()
         else:
             login()
-            
+
+#--------------------Funcion Registrarse-------------------#
+def registeruser():
+    print("Registrar un Administrador Nuevo")
+    db = pymysql.connect(host="localhost",user="root",passwd="Halobat17.",database="rhdb")
+    curs = db.cursor()
+    insert_stmt = (
+    "INSERT INTO users(Usuario, Email, SecurityQuestion, Pass)"
+    "VALUES (%s, %s, %s, %s)"
+    )
+    in0 = input("Digite el Usuario: ")
+    in1 = input("Digite el Email: ")
+    in2 = input("Digite la respuesta a su SQ: ")
+    in3 = input("Digte la Password: ")
+    data = (in0, in1, in2, in3)
+    try:
+        curs.execute(insert_stmt, data)
+        db.commit()
+        messagebox.showinfo("Register","Usuario Registrado")
+        prmenust
+    except:
+        db.rollback()
+        messagebox.showerror("Register","Usuario no Registrado")
+        prmenust()
+          
 #-------------------Consulta Trabajadores---------------#
 def consultardatostrabajadores():
     print("Sistema Recursos Humanos\n")
@@ -195,41 +254,6 @@ def consultardatostrabajadores():
     else:
         print("Opcion Incorrecta\nIntente denuevo")
         opciontrabajador()
-        
-#-------------------Funcion login---------------#
-def login():
-    username = input("Digite el user ")
-    password = input("Digite el pass: ")
-    mydb = pymysql.connect(host="localhost",user="root",passwd="Halobat17.",database="rhdb")
-    cursor = mydb.cursor()
-    savequery = "SELECT * FROM users WHERE Usuario=%s AND Pass=%s" # Get the records with these username and password ONLY
-    cursor.execute(savequery,(username,password))
-    myresult = cursor.fetchall()
-    if myresult: # If there is such a record, then success
-        messagebox.showinfo("LOGIN Corecto",'Bienvenid@'+username)
-        consultardatostrabajadores()
-    else: # Wrong password
-        messagebox.showerror("LOGIN Fallido","Usuario o Pass no encontrados")
-        cursor.close()
-        mydb.close()
-        cerrarinput = input("Desea cerrar recuperar el password?\nS=Si\nN=No\n")
-        if cerrarinput.upper() == "S":
-            olvidopass()
-        elif cerrarinput.upper() == "N":
-            print("Cerrando programa\nNos vemos",username)
-
-#-------------------Funcion Inicio---------------#
-def prmenust():
-    prmst = int(input("{-----------------RH SYSTEM-----------------}\n!WELCOME!\n1.Login\n2.Register\n3.Cerrar\n"))
-    if prmst == 1:
-        login()
-    elif prmst == 2:
-        print("Register")
-    elif prmst == 3:
-        print("GOODBYE")
-    else:
-        print("Digite una opcion correcta")
-        prmenust()
-        
+                
 #-------------------Llamar Funcion Principal---------------#
 prmenust()
