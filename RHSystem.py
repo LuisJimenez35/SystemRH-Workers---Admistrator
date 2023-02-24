@@ -12,9 +12,9 @@ def prmenust():
         print("Register")
         registeruser()
     elif prmst == 3:
-        print("GOODBYE")
+        print("{--------------CLOSE RH SYSTEM--------------}")
     else:
-        print("Digite una opcion correcta")
+        print("\n{------/*Digite una opcion Correcta\*-------}\n")
         prmenust()
       
 #-------------------Funcion login---------------#
@@ -43,15 +43,10 @@ def login():
               
 #----------------Funcion para crear nueva contraseña-----------------
 def olvidopass():
-    print("Sistema para cambiar contraseña:\n")
-    inputadmin = input("Digite su usuario: ")
+    print("\n        {-----Recuperar contraseña-----}\n")
+    inputadmin = input("<Digite su usuario> : ")
     #-----------------Conexion a la Base de datos de los Administradores--------------
-    db = pymysql.connect(
-            host="localhost",
-            user="root",
-            passwd="Halobat17.",
-            db="rhdb"
-        )
+    db = pymysql.connect(host="localhost",user="root",passwd="Halobat17.",db="rhdb")
     cur = db.cursor()
     cur.execute("SELECT * FROM users where Usuario ='" +inputadmin+ "'")
     for row in cur.fetchall():
@@ -64,7 +59,8 @@ def olvidopass():
     randuppercase3 = chr(random.randint(ord('A'), ord('Z')))
     randuppercase4 = chr(random.randint(ord('a'), ord('z')))
     randuppercase5 = chr(random.randint(ord('A'), ord('Z')))
-    secretcode = (randlowercase1+randuppercase2+randuppercase3+randuppercase4+randuppercase5)
+    randuppercase6 = str(random.randint(0,9))
+    secretcode = (randlowercase1+randuppercase2+randuppercase3+randuppercase4+randuppercase5+randuppercase6)
     #------------Enviar el correo de soporte-----------------
     remit = "soportprimeprogram@gmail.com"
     desto = valicorreo
@@ -78,19 +74,19 @@ def olvidopass():
     smtp.login(remit, "gbaabtuzmxgxrvhn")
     smtp.sendmail(remit, desto, email.as_string())
     smtp.quit()
-    print("Correo Enviado")
+    print("\n        ^------Correo Enviado------^\n")
     #---------------Actulizar la nueva contraseña----------------
-    inputcode = input("Digite el codigo enviado a su correo: ")
+    inputcode = input("{Digite el codigo enviado a su correo}: \n")
     if inputcode == secretcode:
-        print("Su codigo es correcto")
-        newpass = input("Digite la nueva contraseña: ")
-        newpass2 = input("Confirme la contraseña: ")
+        messagebox.showinfo("Secure Code","Codigo Correcto")
+        newpass = input("\n1.Digite la nueva contraseña: \n")
+        newpass2 = input("\n2.Confirme la contraseña: \n")
         if newpass == newpass2:
             newpass3 = newpass
             updated_users = """UPDATE users SET Email = %s,SecurityQuestion = %s,Pass = %s WHERE Usuario = %s;"""
             cur.execute(updated_users, (valicorreo, valiSQ, newpass3, valiuser))
+            messagebox.showinfo ("Recuperar Password","Password cambiada con exito")
             db.commit()
-            print("Contraseña Cambiada con exito")
             login()
     else:
         print("Error , verifique su correo")
@@ -128,27 +124,22 @@ def registeruser():
 #-------------------Consulta Trabajadores---------------#
 def consultardatostrabajadores():
     print("Sistema Recursos Humanos\n")
-    db = pymysql.connect(
-        host="localhost",
-        user="root",
-        passwd="Halobat17.",
-        db="rhdb"
-    )
-    opciontrabajador = int(input("{----------Menu RH----------}\n1.Trabajadores Disponibles\n2.Ver Datos de Trabajadores\n3.Cambiar Correo de Usuarios\n4.Enviar Correo a Trabajador\n5.Agregar Trabajador\n6.Eiminar Trabajador\n7.Pago Trabajadores\n8.Salir\n{---------------------------}\n"))
+    db = pymysql.connect(host="localhost",user="root",passwd="Halobat17.",db="rhdb")
+    opciontrabajador = int(input("{----------Menu RH----------}\n1.Trabajadores Disponibles\n2.Ver Datos de Trabajadores\n3.Cambiar Datos trabajadores\n4.Enviar Correo a Trabajador\n5.Agregar Trabajador\n6.Eiminar Trabajador\n7.Pago Trabajadores\n8.Reiniciar Salarios\n9.Salir\n{---------------------------}\n"))
     #-------------------Cosnultar la Lista de trabajadores general---------------#
     if opciontrabajador == 1:
-        print("Trabajadores Disponibles")
+        print("-----Trabajadores Disponibles-----")
         cur = db.cursor()
         cur.execute("SELECT * FROM trabajadores")
-        for DNI, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary in cur.fetchall() :
-            print("\nDNI:",DNI, "\nNombre Completo:",FullName,FullLastName, "\nPuesto:",Position,"\nEmail:",Email,"\n")
+        for Dniwork, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary in cur.fetchall() :
+            print("\nDNI:",Dniwork, "\nNombre Completo:",FullName,FullLastName, "\nPuesto:",Position,"\nEmail:",Email,"\n")
         consultardatostrabajadores()
     #-------------------Consultar datos trabajadores por separado---------------#
     elif opciontrabajador == 2:
         print("Ver Datos de Trabajadores")
         inputOt2 = input("Escriba la cedula del trabajador: ")
         cur = db.cursor()
-        cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt2+ "'")
+        cur.execute("SELECT * FROM trabajadores where Dniwork ='" +inputOt2+ "'")
         for row in cur.fetchall():
             print("\nCedula: ",row[0],"\nNombre Completo: ",row[1],row[2],"\nFecha de Nacimiento: ",row[3],"\nUbicacion: ",row[4],"\nFecha de Contratacion: ",row[5],"\nPuesto: ",row[6],"\nTelefono: ",row[7],"\nEmail: ",row[8],"\nSalario: ",row[9],"\n")
             consultardatostrabajadores()
@@ -157,7 +148,7 @@ def consultardatostrabajadores():
         print("Cambiar Datos de Trabajadores")
         inputOt3 = input("Digite la Cedula del Trabajador ")
         cur = db.cursor()
-        cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt3+ "'")
+        cur.execute("SELECT * FROM trabajadores where Dniwork ='" +inputOt3+ "'")
         for row in cur.fetchall():
             Op0 = row[0]
             Op1 = row[1]
@@ -169,10 +160,19 @@ def consultardatostrabajadores():
         newposition = input("Digite el nuevo titulo ")
         newcelllphone = input("Digite el nuevo Telefono ")
         newEmail = input("Digite el nuevo Email ")
-        updated_email = """UPDATE trabajadores SET FullName = %s,FullLastName = %s,Birthday = %s,Location = %s,DateOfHire = %s,Position = %s,Cellphone = %s,Email = %s,Salary = %sWHERE DNI = %s;"""
-        cur.execute(updated_email, (Op1, Op2, Op3, newlocation, Op5, newposition, newcelllphone, newEmail,Op9,Op0))
+        updated_email =  """UPDATE trabajadores
+                            SET FullName = %s,
+                                FullLastName = %s,
+                                Birthday = %s,
+                                Location = %s,
+                                DateOfHire = %s,
+                                Position = %s,
+                                Cellphone = %s,
+                                Email = %s,
+                                Salary = %s
+                            WHERE DNI = %s;"""
+        cur.execute(updated_email, (Op1, Op2, Op3, newlocation, Op5, newposition, newcelllphone,newEmail,Op9,Op0))
         db.commit()
-        messagebox.showinfo("Actualizacion de datos","Los datos fueron actualizados con exito")
         consultardatostrabajadores()
     #-------------------Enviar Correo a Trabajadores---------------#
     elif opciontrabajador == 4:
@@ -200,9 +200,47 @@ def consultardatostrabajadores():
     #-------------------Agregar Trabajadores---------------#
     elif opciontrabajador == 5:
         print("Agregar Trabajador")
+        consultardatostrabajadores()
+    #-------------------Borrar Trabajadores---------------#
+    elif opciontrabajador == 6:
+        print("Eliminar Trabajador")
+        assword = input("Digite el pass: ")
+        mydb = pymysql.connect(host="localhost",user="root",passwd="Halobat17.",database="rhdb")
+        cursor = mydb.cursor()
+        savequery = "SELECT * FROM users WHERE Usuario=%s AND Pass=%s" # Get the records with these username and password ONLY
+        cur.execute(updated_email, (Op1, Op2, Op3, newlocation, Op5, newposition, newcelllphone, newEmail,Op9,Op0))
+        db.commit()
+        messagebox.showinfo("Actualizacion de datos","Los datos fueron actualizados con exito")
+        consultardatostrabajadores()
+    #-------------------Enviar Correo a Trabajadores---------------#
+    elif opciontrabajador == 4:
+        print("Enviar Correo a Trabajador")
+        inputOt4 = input("Digite la Cedula del Trabajador ")
+        cur = db.cursor()
+        cur.execute("SELECT * FROM trabajadores where Dniwork ='" +inputOt4+ "'")
+        for row in cur.fetchall():
+            Op8 = row[8]
+        msjOT4 = input("Escriba el mensaje que va a enviar")
+        remit = "soportprimeprogram@gmail.com"
+        desto = Op8
+        msj = msjOT4
+        email = EmailMessage()
+        email["From"] = remit
+        email["To"] = desto
+        email["Subject"] = "Correo de Recursos Humanos"
+        email.set_content(msj)
+        smtp = smtplib.SMTP_SSL("smtp.gmail.com")
+        smtp.login(remit, "gbaabtuzmxgxrvhn")
+        smtp.sendmail(remit, desto, email.as_string())
+        smtp.quit()
+        print("Correo Enviado con Exito")
+        consultardatostrabajadores()
+    #-------------------Agregar Trabajadores---------------#
+    elif opciontrabajador == 5:
+        print("Agregar Trabajador")
         curs = db.cursor()
         insert_stmt = (
-        "INSERT INTO trabajadores(DNI, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary)"
+        "INSERT INTO trabajadores(Dniwork, FullName, FullLastName, Birthday, Location, DateOfHire, Position, Cellphone, Email, Salary)"
         "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         )
         in0 = int(input("Digite la Cedula: "))
@@ -225,7 +263,7 @@ def consultardatostrabajadores():
     elif opciontrabajador == 6:
         print("Eliminar Trabajador")
         cursor = db.cursor()
-        sql_Delete_query = """Delete from trabajadores where DNI = %s"""
+        sql_Delete_query = """Delete from trabajadores where Dniwork = %s"""
         # row to delete
         DNIinput = input("Digite la cedula del trabajador: ")
         cursor.execute(sql_Delete_query, (DNIinput,))
@@ -246,7 +284,7 @@ def consultardatostrabajadores():
         Doc = 510000
         inputOt3 = input("Digite la Cedula del Trabajador ")
         cur = db.cursor()
-        cur.execute("SELECT * FROM trabajadores where DNI ='" +inputOt3+ "'")
+        cur.execute("SELECT * FROM trabajadores where Dniwork ='" +inputOt3+ "'")
         for row in cur.fetchall():
             Op0 = row[0]
             Op1 = row[1]
@@ -262,7 +300,17 @@ def consultardatostrabajadores():
             Falinput = int(input("Digite las faltas: "))
             calc = 18600 * Falinput
             Resf = Bach - calc
-            updated_pay = """UPDATE trabajadores SET FullName = %s,FullLastName = %s,Birthday = %s,Location = %s,DateOfHire = %s,Position = %s,Cellphone = %s,Email = %s,Salary = %sWHERE DNI = %s;"""
+            updated_pay = """UPDATE trabajadores 
+                      SET FullName = %s,
+                         FullLastName = %s,
+                         Birthday = %s,
+                         Location = %s,
+                         DateOfHire = %s,
+                         Position = %s,
+                         Cellphone = %s,
+                         Email = %s,
+                         Salary = %s
+                      WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
             messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
@@ -271,7 +319,17 @@ def consultardatostrabajadores():
             Falinput = int(input("Digite las faltas: "))
             calc = 24000 * Falinput
             Resf = Lic - calc
-            updated_pay = """UPDATE trabajadores SET FullName = %s,FullLastName = %s,Birthday = %s,Location = %s,DateOfHire = %s,Position = %s,Cellphone = %s,Email = %s,Salary = %sWHERE DNI = %s;"""
+            updated_pay = """UPDATE trabajadores 
+                      SET FullName = %s,
+                         FullLastName = %s,
+                         Birthday = %s,
+                         Location = %s,
+                         DateOfHire = %s,
+                         Position = %s,
+                         Cellphone = %s,
+                         Email = %s,
+                         Salary = %s
+                      WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
             messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
@@ -281,7 +339,17 @@ def consultardatostrabajadores():
             Falinput = int(input("Digite las faltas: "))
             calc = 30000 * Falinput
             Resf = Mast - calc
-            updated_pay = """UPDATE trabajadores SET FullName = %s,FullLastName = %s,Birthday = %s,Location = %s,DateOfHire = %s,Position = %s,Cellphone = %s,Email = %s,Salary = %sWHERE DNI = %s;"""
+            updated_pay = """UPDATE trabajadores 
+                      SET FullName = %s,
+                         FullLastName = %s,
+                         Birthday = %s,
+                         Location = %s,
+                         DateOfHire = %s,
+                         Position = %s,
+                         Cellphone = %s,
+                         Email = %s,
+                         Salary = %s
+                      WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
             messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
@@ -291,13 +359,26 @@ def consultardatostrabajadores():
             Falinput = int(input("Digite las faltas: "))
             calc = 34000 * Falinput
             Resf = Doc - calc
-            updated_pay = """UPDATE trabajadores SET FullName = %s,FullLastName = %s,Birthday = %s,Location = %s,DateOfHire = %s,Position = %s,Cellphone = %s,Email = %s,Salary = %sWHERE DNI = %s;"""
+            updated_pay = """UPDATE trabajadores 
+                      SET FullName = %s,
+                         FullLastName = %s,
+                         Birthday = %s,
+                         Location = %s,
+                         DateOfHire = %s,
+                         Position = %s,
+                         Cellphone = %s,
+                         Email = %s,
+                         Salary = %s
+                      WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
             messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
             consultardatostrabajadores()
             print("Su pago es: ",Resf)
     elif opciontrabajador == 8:
+        print("{------Reiniciar Salario de trabajadores------}")
+        
+    elif opciontrabajador == 9:
         print("Devolviendose: ")
         prmenust()
     else:
