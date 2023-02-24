@@ -3,6 +3,7 @@ import pymysql
 from email.message import EmailMessage
 import smtplib
 import messagebox
+from datetime import date
 #-------------------Funcion Inicio---------------#
 def prmenust():
     prmst = int(input("{-----------------RH SYSTEM-----------------}\n                  !WELCOME!\n                  1.Login\n                  2.Register\n                  3.Cerrar\n{-------------------------------------------}\n"))
@@ -278,6 +279,8 @@ def consultardatostrabajadores():
     #-------------------Pago Quincenal---------------#
     elif opciontrabajador == 7:
         print("Pago Quincenal: ")
+        today = date.today()
+        payday = today.strftime("%b-%d-%Y")
         Bach = 280000
         Lic = 360000
         Mast = 450000
@@ -313,7 +316,22 @@ def consultardatostrabajadores():
                       WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
-            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            refs = str(Resf)
+            fallas = str(Falinput)
+            messagebox.showinfo("Pago Autorizado", "Puede ver el pago en los datos de los trabajadores")
+            remit = "soportprimeprogram@gmail.com"
+            desto = Op8
+            msj = "Hola de parte de RHSystem al trabajador "+Op1+ Op2+" se le notifica que el "+payday+" se le ha pagado su salario quincenal correspodiente a: "+refs+" colones , esto debido a "+fallas+" faltas cometidas en estos 15 dias , si tiene alguna queja por favor enviar un mensaje a contarhsys@gmail.com"
+            email = EmailMessage()
+            email["From"] = remit
+            email["To"] = desto
+            email["Subject"] = "Notificacion de pago Quincenal"
+            email.set_content(msj)
+            smtp = smtplib.SMTP_SSL("smtp.gmail.com")
+            smtp.login(remit, "gbaabtuzmxgxrvhn")
+            smtp.sendmail(remit, desto, email.as_string())
+            messagebox.showinfo("Pago Notificacacion","Notoficaion enviada con exito")
+            smtp.quit()
             consultardatostrabajadores()
         elif Op6 == "Lic":
             Falinput = int(input("Digite las faltas: "))
@@ -332,9 +350,23 @@ def consultardatostrabajadores():
                       WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
-            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            refs = str(Resf)
+            fallas = str(Falinput)
+            messagebox.showinfo("Pago Autorizado", "Puede ver el pago en los datos de los trabajadores")
+            remit = "soportprimeprogram@gmail.com"
+            desto = Op8
+            msj = "Hola de parte de RHSystem al trabajador "+Op1+ Op2+" se le notifica que el "+payday+" se le ha pagado su salario quincenal correspodiente a: "+refs+" colones , esto debido a "+fallas+" faltas cometidas en estos 15 dias , si tiene alguna queja por favor enviar un mensaje a contarhsys@gmail.com"
+            email = EmailMessage()
+            email["From"] = remit
+            email["To"] = desto
+            email["Subject"] = "Notificacion de pago Quincenal"
+            email.set_content(msj)
+            smtp = smtplib.SMTP_SSL("smtp.gmail.com")
+            smtp.login(remit, "gbaabtuzmxgxrvhn")
+            smtp.sendmail(remit, desto, email.as_string())
+            messagebox.showinfo("Pago Notificacacion","Notoficaion enviada con exito")
+            smtp.quit()
             consultardatostrabajadores()
-            print("Su pago es: ",Resf)
         elif Op6 == "Mast":
             Falinput = int(input("Digite las faltas: "))
             calc = 30000 * Falinput
@@ -352,9 +384,23 @@ def consultardatostrabajadores():
                       WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
-            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            refs = str(Resf)
+            fallas = str(Falinput)
+            messagebox.showinfo("Pago Autorizado", "Puede ver el pago en los datos de los trabajadores")
+            remit = "soportprimeprogram@gmail.com"
+            desto = Op8
+            msj = "Hola de parte de RHSystem al trabajador "+Op1+ Op2+" se le notifica que el "+payday+" se le ha pagado su salario quincenal correspodiente a: "+refs+" colones , esto debido a "+fallas+" faltas cometidas en estos 15 dias , si tiene alguna queja por favor enviar un mensaje a contarhsys@gmail.com"
+            email = EmailMessage()
+            email["From"] = remit
+            email["To"] = desto
+            email["Subject"] = "Notificacion de pago Quincenal"
+            email.set_content(msj)
+            smtp = smtplib.SMTP_SSL("smtp.gmail.com")
+            smtp.login(remit, "gbaabtuzmxgxrvhn")
+            smtp.sendmail(remit, desto, email.as_string())
+            messagebox.showinfo("Pago Notificacacion","Notoficaion enviada con exito")
+            smtp.quit()
             consultardatostrabajadores()
-            print("Su pago es: ",Resf)
         elif Op6 == "Doc":
             Falinput = int(input("Digite las faltas: "))
             calc = 34000 * Falinput
@@ -372,9 +418,23 @@ def consultardatostrabajadores():
                       WHERE Dniwork = %s;"""
             cur.execute(updated_pay, (Op1, Op2, Op3, Op4, Op5, Op6, Op7, Op8, Resf,Op0))
             db.commit()
-            messagebox.showinfo("Pago Autorizado","Puede ver el pago en los datos de los trabajadores")
+            refs = str(Resf)
+            fallas = str(Falinput)
+            messagebox.showinfo("Pago Autorizado", "Puede ver el pago en los datos de los trabajadores")
+            remit = "soportprimeprogram@gmail.com"
+            desto = Op8
+            msj = "Hola de parte de RHSystem al trabajador "+Op1+ Op2+" se le notifica que el "+payday+" se le ha pagado su salario quincenal correspodiente a: "+refs+" colones , esto debido a "+fallas+" faltas cometidas en estos 15 dias , si tiene alguna queja por favor enviar un mensaje a contarhsys@gmail.com"
+            email = EmailMessage()
+            email["From"] = remit
+            email["To"] = desto
+            email["Subject"] = "Notificacion de pago Quincenal"
+            email.set_content(msj)
+            smtp = smtplib.SMTP_SSL("smtp.gmail.com")
+            smtp.login(remit, "gbaabtuzmxgxrvhn")
+            smtp.sendmail(remit, desto, email.as_string())
+            messagebox.showinfo("Pago Notificacacion","Notoficaion enviada con exito")
+            smtp.quit()
             consultardatostrabajadores()
-            print("Su pago es: ",Resf)
     elif opciontrabajador == 8:
         print("{------Reiniciar Salario de trabajadores------}")
         
