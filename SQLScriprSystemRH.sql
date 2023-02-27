@@ -9,8 +9,8 @@ create table if not exists users (
 )
 
 create table if not exists trabajadores (
-	Dniwork int,
-	FullName varchar(50),
+    Dniwork int,
+    FullName varchar(50),
     FullLastName varchar(50),
     Birthday varchar(50),
     Location varchar(50),
