@@ -53,22 +53,51 @@ def login_verification():
 def validate_new_password():
     pass1 = newEntry1.get()
     pass2 = newEntry2.get()
-    if pass1 == pass2:
-        try:
-            with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-                cursor = cnxn.cursor()
-                query = "UPDATE users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
-                
-                cursor.execute(query, (valicorreo, valisq, pass1,valiuser))
-                cnxn.commit
-                messagebox.showinfo("New Password", "The new password was created successfully")
-                newpasswin.destroy()
-                Forgotwindow.destroy()              
-        except pyodbc.Error as e:
-            messagebox.showerror("ERROR", f"Database error: {e}")
+    if pass1 != valipass or pass2 != valipass:
+        if pass1 == pass2:
+            try:
+                with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+                    cursor = cnxn.cursor()
+                    query = "UPDATE users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
+                    
+                    cursor.execute(query, (valicorreo, valisq, pass1,valiuser))
+                    cnxn.commit
+                    messagebox.showinfo("New Password", "The new password was created successfully")
+                    newpasswin.destroy()
+                    Forgotwindow.destroy()              
+            except pyodbc.Error as e:
+                messagebox.showerror("ERROR", f"Database error: {e}")
+        else:
+            messagebox.showerror("Error","Passwords are not equals")
     else:
-        messagebox.showerror("Error","Passwords are not equals")
+        messagebox.showerror("Error","I can't use the old password")
 
+#Verification of credentials to register
+def register_verification():
+    new_username = newuserEntry.get()
+    new_email = EmailEntry.get()
+    new_secure_q = SecuereQuesEntry.get()
+    new_password = passwordEntry.get()
+    try:
+        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+            cursor = cnxn.cursor()
+            cursor.execute("SELECT * FROM users WHERE UserName=? OR Email=?", (new_username,new_email))
+            if cursor.fetchone() is not None:
+                messagebox.showerror("Register", "User or Email already exists in the System")
+                reisterw.destroy()
+                principal_window()
+            else:               
+                cursor = cnxn.cursor()
+                regquery = "INSERT INTO users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
+                cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
+                cnxn.commit()
+                cnxn.close
+                messagebox.showinfo("Register", "Successful Register")
+                reisterw.destroy()
+                principal_window()
+    except pyodbc.Error as e:
+        messagebox.showerror("ERROR", f"Database error: {e}")
+        
 #Create new password window 
 def new_password():
     global newpasswin, newEntry1, newEntry2
@@ -93,32 +122,6 @@ def new_password():
         changeButton.place(x=50, y=130)
         newpasswin.mainloop()
         
-#Verification of credentials to register
-def register_verification():
-    new_username = newuserEntry.get()
-    new_email = EmailEntry.get()
-    new_secure_q = SecuereQuesEntry.get()
-    new_password = passwordEntry.get()
-    try:
-        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-            cursor = cnxn.cursor()
-            cursor.execute("SELECT * FROM users WHERE UserName=?", (new_username))
-            if cursor.fetchone() is not None:
-                messagebox.showerror("Register", "User already exists")
-                reisterw.destroy()
-                principal_window()
-            else:               
-                cursor = cnxn.cursor()
-                regquery = "INSERT INTO users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
-                cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
-                cnxn.commit()
-                cnxn.close
-                messagebox.showinfo("Register", "Successful Register")
-                reisterw.destroy()
-                principal_window()
-    except pyodbc.Error as e:
-        messagebox.showerror("ERROR", f"Database error: {e}")
-    
 #Welcome and main window
 def principal_window():
     global rootw
@@ -196,7 +199,7 @@ def register_window():
 
 #Forgot password window
 def Forgot_password_window():
-    global Forgotwindow, codeEntry, secretcode , valiuser,valicorreo,valisq
+    global Forgotwindow, codeEntry, secretcode , valiuser,valicorreo,valisq, valipass
     #Get username data input
     gets_username = usernameEntry.get()
     #forgot window database connection
@@ -209,7 +212,6 @@ def Forgot_password_window():
                 valicorreo = row[1]
                 valisq = row[2]
                 valipass = row[3]
-                print(valicorreo)
     except pyodbc.Error as e:
         messagebox.showerror("ERROR", f"Database error: {e}")
     ##Create a secret code
@@ -237,10 +239,10 @@ def Forgot_password_window():
     msg.attach(MIMEText(html, 'html'))
     msg['From'] = 'soportprimeprogram@gmail.com'
     msg['To'] = valicorreo
-    msg['Subject'] = 'Codigo para cambiar password'
+    msg['Subject'] = 'Code to change password'
     with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
         smtp.starttls()
-        smtp.login('soportprimeprogram@gmail.com', 'gbaabtuzmxgxrvhn')
+        smtp.login('soportprimeprogram@gmail.com', 'lgvozquxlykfijaq')
         smtp.send_message(msg)
     Forgotwindow = Tk()
     Forgotwindow.title("Forgot your Password")
