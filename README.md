@@ -1,21 +1,21 @@
-# SystemRH-Workers-Admistrator
-## Introduccion:
-Una empresa (Ficticia) solicita un sistema local que permita admistrar a sus respectivos trabajadores [Acualizar sus datos , pagos , prestaciones , agregar o eliminar trabjadores y mantener un control de horarios] , nuestro deber es cumplir con los requerimientos que nos solicitaron
-## Antecedemtes de la situacion:
-La empresa quiere actulizarse y dejar atras la organizacion por papel y lapiz hacia un sistema informatico automatico que les permita organizar a todos lo empleados de la empresa con la mayor calidad y facilidad posible
-## Levantamiento de Requerimientos y resultados de la entrevista
-Entre los requerimientos que nos solicitaron se encuentran:
-- Control de trabajadores
-  - Agregar nuevos trabajores y eliminar trabajadores
-  - Actualizar datos y informacion de trabajadores
-  - Consultar los dias y horas trabajadas (Incluyendo las faltas , ausencias , seguro y prestaciones) para que la informacion del pago se de automaticamente 
-  - Consultar cuantos trabajadores existen por area de trabajo {Secretariado , Contadoria , Desarrollo , Administracion} y capacidad para agregar mas puestos o eliminar puestos en un futuro
-- Contol de autentificacion
-  - Para la empresa en muy importate la seguridad por lo cual nos solicitan que aquellos trabajadores de puesto de Recursos Humanos se les cree una cuenta automaticamnete o manualmente para manejar el SystemRH-Workers-Admistrator
-  - Opcion para recuperar contraseña con autentificacion de dos factores con los datos de los encargados de SystemRH-Workers-Admistrator
-## Software Disponible:
+## SystemRH-Workers-Administrator
+## Introduction:
+A company (Fictitious) requests a local system that allows to administrate their respective workers [Update their data, payments, benefits, add or delete workers and maintain a time control]. Our duty is to comply with the requirements requested.
+## Background of the situation:
+The company wants to upgrade and leave behind the organization by paper and pencil to an automated computer system that allows them to organize all employees of the company with the highest quality and ease possible.
+## Survey of requirements and interview results
+Among the requirements that we were asked for are:
+- Control of workers
+  - Add new workers and delete workers
+  - Update data and information of workers
+  - Query days and hours worked (including absences, absences, insurance and benefits) so that payment information is provided automatically. 
+  - Query how many workers exist by work area {Secretary, Accounting, Development, Administration} and ability to add more positions or delete positions in the future
+- Authentication control
+  - For the company security is very important so we are asked to create an account automatically or manually to manage the SystemRH-Workers-Admistrator for those workers in the Human Resources area.
+  - Option to recover password with two-factor authentication with SystemRH-Workers-Admistrator manager data.
+## Software Available:
 - Python Ver. 3.11
-  - Librerias Utilizadas:
+  - Libraries Used:
     - Tkinter
     - Random
     - String
