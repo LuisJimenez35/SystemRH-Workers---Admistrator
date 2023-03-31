@@ -13,7 +13,7 @@ Entre los requerimientos que nos solicitaron se encuentran:
 - Contol de autentificacion
   - Para la empresa en muy importate la seguridad por lo cual nos solicitan que aquellos trabajadores de puesto de Recursos Humanos se les cree una cuenta automaticamnete o manualmente para manejar el SystemRH-Workers-Admistrator
   - Opcion para recuperar contraseña con autentificacion de dos factores con los datos de los encargados de SystemRH-Workers-Admistrator
-##Software Disponible:
+## Software Disponible:
 - Python Ver. 3.11
   - Librerias Utilizadas:
     - Tkinter
