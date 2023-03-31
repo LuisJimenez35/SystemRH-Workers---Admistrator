@@ -37,7 +37,7 @@ def login_verification():
     try:
         with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
             cursor = cnxn.cursor()
-            cursor.execute("SELECT * FROM users WHERE UserName=? AND Pass=?", (username, password))
+            cursor.execute("SELECT * FROM Users WHERE UserName=? AND Pass=?", (username, password))
             if cursor.fetchone() is not None:
                 messagebox.showinfo("LOGIN", "Successful login")
                 tkWindow.destroy()
@@ -56,7 +56,7 @@ def validate_new_password():
             try:
                 with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                     cursor = cnxn.cursor()
-                    query = "UPDATE users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
+                    query = "UPDATE Users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
                     
                     cursor.execute(query, (valicorreo, valisq, pass1,valiuser))
                     cnxn.commit
@@ -82,12 +82,12 @@ def register_verification():
         try:
             with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                 cursor = cnxn.cursor()
-                cursor.execute("SELECT * FROM users WHERE UserName=? OR Email=?", (new_username,new_email))
+                cursor.execute("SELECT * FROM Users WHERE UserName=? OR Email=?", (new_username,new_email))
                 if cursor.fetchone() is not None:
                     messagebox.showerror("Register", "User or Email already exists in the System")
                 else:               
                     cursor = cnxn.cursor()
-                    regquery = "INSERT INTO users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
+                    regquery = "INSERT INTO Users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
                     cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
                     cnxn.commit()
                     cnxn.close
@@ -156,8 +156,8 @@ def login_window():
     passwordEntry.place(x=100, y=80)
     loginButton = Button(tkWindow, text="Login", width=10, height=1, bg="forest green" , fg="white" ,font=("Courier", 10, "bold") , command=login_verification) 
     loginButton.place(x=110, y=115)
-    RememberButton = Button(tkWindow, text="Forgot your password", width=19, height=1, bg="firebrick4",fg="white" ,font=("Courier", 10, "bold"), command=Forgot_password_window)
-    RememberButton.place(x=85, y=150)
+    RememberButton = Button(tkWindow, text="Forgot your password", width=20, height=1, bg="firebrick4",fg="white" ,font=("Courier", 10, "bold"), command=Forgot_password_window)
+    RememberButton.place(x=75, y=150)
     retButton = Button(tkWindow, text="<- Return Menu", width=14, height=1, bg="PaleGreen4",fg="white" ,font=("Courier", 9, "bold") ,command=return_principal_2)
     retButton.place(x=10, y=190)      
     tkWindow.mainloop()
@@ -206,7 +206,7 @@ def Forgot_password_window():
         try:
             with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                 cursor = cnxn.cursor()
-                cursor.execute("SELECT * FROM users WHERE UserName=?", (gets_username))
+                cursor.execute("SELECT * FROM Users WHERE UserName=?", (gets_username))
                 for row in cursor.fetchall():
                     valiuser = row[0]
                     valicorreo = row[1]
