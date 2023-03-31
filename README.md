@@ -15,6 +15,13 @@ Entre los requerimientos que nos solicitaron se encuentran:
   - Opcion para recuperar contraseña con autentificacion de dos factores con los datos de los encargados de SystemRH-Workers-Admistrator
 ##Software Disponible:
 - Python Ver. 3.11
-  - Libreias Utilizadas:
+  - Librerias Utilizadas:
     - Tkinter
+    - Random
+    - String
+    - EmailMessage
+    - Smtplib
+    - Messagebox
+    - Pyodbc
+    - Datetime
 - SQL Server Ver. 19
