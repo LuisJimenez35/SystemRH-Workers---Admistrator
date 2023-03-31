@@ -76,25 +76,26 @@ def register_verification():
     new_email = EmailEntry.get()
     new_secure_q = SecuereQuesEntry.get()
     new_password = passwordEntry.get()
-    try:
-        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-            cursor = cnxn.cursor()
-            cursor.execute("SELECT * FROM users WHERE UserName=? OR Email=?", (new_username,new_email))
-            if cursor.fetchone() is not None:
-                messagebox.showerror("Register", "User or Email already exists in the System")
-                reisterw.destroy()
-                principal_window()
-            else:               
+    if len(new_username) == 0 and len(new_email) == 0 and len(new_secure_q) == 0 and len(new_password) == 0:
+        messagebox.showerror("Error","Please fill in all data")
+    else:
+        try:
+            with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                 cursor = cnxn.cursor()
-                regquery = "INSERT INTO users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
-                cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
-                cnxn.commit()
-                cnxn.close
-                messagebox.showinfo("Register", "Successful Register")
-                reisterw.destroy()
-                principal_window()
-    except pyodbc.Error as e:
-        messagebox.showerror("ERROR", f"Database error: {e}")
+                cursor.execute("SELECT * FROM users WHERE UserName=? OR Email=?", (new_username,new_email))
+                if cursor.fetchone() is not None:
+                    messagebox.showerror("Register", "User or Email already exists in the System")
+                else:               
+                    cursor = cnxn.cursor()
+                    regquery = "INSERT INTO users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
+                    cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
+                    cnxn.commit()
+                    cnxn.close
+                    messagebox.showinfo("Register", "Successful Register")
+                    reisterw.destroy()
+                    principal_window()
+        except pyodbc.Error as e:
+            messagebox.showerror("ERROR", f"Database error: {e}")
         
 #Create new password window 
 def new_password():
@@ -160,6 +161,7 @@ def login_window():
     retButton = Button(tkWindow, text="<- Return Menu", width=14, height=1, bg="PaleGreen4",fg="white" ,font=("Courier", 9, "bold") ,command=return_principal_2)
     retButton.place(x=10, y=190)      
     tkWindow.mainloop()
+    
 #Register window   
 def register_window():
     rootw.destroy()
