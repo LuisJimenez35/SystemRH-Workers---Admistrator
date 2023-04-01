@@ -79,23 +79,26 @@ def register_verification():
     if len(new_username) == 0 and len(new_email) == 0 and len(new_secure_q) == 0 and len(new_password) == 0:
         messagebox.showerror("Error","Please fill in all data")
     else:
-        try:
-            with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-                cursor = cnxn.cursor()
-                cursor.execute("SELECT * FROM Users WHERE UserName=? OR Email=?", (new_username,new_email))
-                if cursor.fetchone() is not None:
-                    messagebox.showerror("Register", "User or Email already exists in the System")
-                else:               
+        if "@" not in new_email:
+            messagebox.showerror("Error","The Email not is valid")
+        else:
+            try:
+                with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                     cursor = cnxn.cursor()
-                    regquery = "INSERT INTO Users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
-                    cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
-                    cnxn.commit()
-                    cnxn.close
-                    messagebox.showinfo("Register", "Successful Register")
-                    reisterw.destroy()
-                    principal_window()
-        except pyodbc.Error as e:
-            messagebox.showerror("ERROR", f"Database error: {e}")
+                    cursor.execute("SELECT * FROM Users WHERE UserName=? OR Email=?", (new_username,new_email))
+                    if cursor.fetchone() is not None:
+                        messagebox.showerror("Register", "User or Email already exists in the System")
+                    else:               
+                        cursor = cnxn.cursor()
+                        regquery = "INSERT INTO Users (UserName, Email, SecurityQuestion, Pass) VALUES (?, ?, ?, ?)"
+                        cursor.execute(regquery,new_username,new_email,new_secure_q,new_password)            
+                        cnxn.commit()
+                        cnxn.close
+                        messagebox.showinfo("Register", "Successful Register")
+                        reisterw.destroy()
+                        principal_window()
+            except pyodbc.Error as e:
+                messagebox.showerror("ERROR", f"Database error: {e}")
         
 #Create new password window 
 def new_password():
@@ -168,30 +171,31 @@ def register_window():
     global reisterw,newuserEntry,EmailEntry,SecuereQuesEntry,passwordEntry
     reisterw = Tk()
     reisterw.title("Register new RH-User")
-    reisterw.geometry("300x320")
-    reisterw.configure(bg="dark slate gray")
+    reisterw.geometry("350x350")
+    reisterw.configure(bg="light blue")
     reisterw.resizable(0,0)
-    Label(reisterw, text="Please enter all details", width="300",height=2, bg="midnight blue",fg="white").pack()  
-    usernameLabel = Label(reisterw, text="New Username",bg="dark slate gray",fg="white")
+    labelreg = Label(reisterw, text="Register User",bg="light blue",fg="SkyBlue4", font=("Courier New", 15, "bold") )
+    labelreg.place(x=70,y=11)
+    usernameLabel = Label(reisterw, text="New Username",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
     usernameLabel.place(x=22, y=50)    
-    newuserEntry = Entry(reisterw)
-    newuserEntry.place(x=110, y=50)    
-    EmailLabel = Label(reisterw, text="New Email",bg="dark slate gray",fg="white")
+    newuserEntry = Entry(reisterw,fg="gray25", font=("Candara", 10, "bold") )
+    newuserEntry.place(x=140, y=50)    
+    EmailLabel = Label(reisterw, text="New Email",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
     EmailLabel.place(x=22, y=90)    
-    EmailEntry = Entry(reisterw)
-    EmailEntry.place(x=110, y=90)   
-    SecuereQuesLabel = Label(reisterw, text="You Birth town",bg="dark slate gray",fg="white")
+    EmailEntry = Entry(reisterw,fg="gray25", font=("Candara", 10, "bold") )
+    EmailEntry.place(x=140, y=90)   
+    SecuereQuesLabel = Label(reisterw, text="You Birth town",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
     SecuereQuesLabel.place(x=22, y=130)    
-    SecuereQuesEntry = Entry(reisterw)
-    SecuereQuesEntry.place(x=110, y=130)          
-    passwordLabel = Label(reisterw, text="New Password",bg="dark slate gray",fg="white")
+    SecuereQuesEntry = Entry(reisterw,fg="gray25", font=("Candara", 10, "bold") )
+    SecuereQuesEntry.place(x=140, y=130)          
+    passwordLabel = Label(reisterw, text="New Password",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
     passwordLabel.place(x=22, y=170)    
-    passwordEntry = Entry(reisterw, show='*')
-    passwordEntry.place(x=110, y=170)        
-    regButton = Button(reisterw, text="Register User +", width=15, height=2, bg="midnight blue",fg="white", command=register_verification)
-    regButton.place(x=107, y=220)
-    returnButton = Button(reisterw, text="<- Return Menu", width=12, height=1, bg="PaleGreen4",fg="white",command=return_principal)
-    returnButton.place(x=115, y=270)   
+    passwordEntry = Entry(reisterw, show='*',fg="gray25", font=("Candara", 10, "bold") )
+    passwordEntry.place(x=140, y=170)        
+    regButton = Button(reisterw, text="Register User +", width=15, height=1, bg="midnight blue",fg="white" ,font=("Courier", 10, "bold"),command=register_verification)
+    regButton.place(x=147, y=210)
+    returnButton = Button(reisterw, text="<- Return Menu",width=14, height=1, bg="PaleGreen4",fg="white" ,font=("Courier", 9, "bold"),command=return_principal)
+    returnButton.place(x=10, y=300)   
     reisterw.mainloop()
 
 #Forgot password window
