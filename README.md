@@ -24,4 +24,7 @@ Among the requirements that we were asked for are:
     - Messagebox
     - Pyodbc
     - Datetime
+    - ImageTk
+    - MIMEText
+    - MIMEMultipart
 - SQL Server Ver. 19
