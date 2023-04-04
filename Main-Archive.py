@@ -11,25 +11,18 @@ from datetime import date
 import pyodbc
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from PIL import ImageTk, Image
 
 #Variables for the connection with the database
 global server , database
 server = 'localhost'
 database = 'Db_prueba_py'
 
-#Return principal #1
-def return_principal():
-    reisterw.destroy()
-    principal_window()  
-#Return principal #2
-def return_principal_2():
-    tkWindow.destroy()
-    principal_window()
-#Return principal #3
-def return_principal_3():
+#Return Main_Window
+def return_main():
     welcomeWindow.destroy()
-    principal_window()
-
+    Main_Window()
+    
 #Verification of credentials to log in      
 def login_verification():
     username = usernameEntry.get()
@@ -75,7 +68,7 @@ def register_verification():
     new_username = newuserEntry.get()
     new_email = EmailEntry.get()
     new_secure_q = SecuereQuesEntry.get()
-    new_password = passwordEntry.get()
+    new_password = passwordEntrys.get()
     if len(new_username) == 0 and len(new_email) == 0 and len(new_secure_q) == 0 and len(new_password) == 0:
         messagebox.showerror("Error","Please fill in all data")
     else:
@@ -95,8 +88,6 @@ def register_verification():
                         cnxn.commit()
                         cnxn.close
                         messagebox.showinfo("Register", "Successful Register")
-                        reisterw.destroy()
-                        principal_window()
             except pyodbc.Error as e:
                 messagebox.showerror("ERROR", f"Database error: {e}")
         
@@ -124,80 +115,57 @@ def new_password():
         changeButton = Button(newpasswin, text="Create New Passord", bg="forest green",fg="white" ,font=("Courier", 10, "bold"), command=validate_new_password)
         changeButton.place(x=70, y=190)
         newpasswin.mainloop()
-        
-#Welcome and main window
-def principal_window():
-    global rootw
-    rootw = Tk()
-    rootw.title("RHSystem")
-    rootw.geometry("300x200")
-    rootw.configure(bg="light blue")
-    rootw.resizable(0,0)  
-    loginw = Button(rootw, text="Log-in", width=13, height=1, bg="dark green",fg="white",font=("Courier", 10, "bold"), command=login_window)
-    loginw.place(x=100, y=30)
-    regw = Button(rootw, text="Sign-up", width=13, height=1, bg="blue4",fg="white" ,font=("Courier", 10, "bold") , command=register_window)
-    regw.place(x=100, y=90)
-    rootw.mainloop()
-    
-#Login window       
-def login_window():
-    rootw.destroy()
-    global tkWindow, usernameEntry, passwordEntry
+            
+#Principal window       
+def Main_Window():
+    global tkWindow, usernameEntry, passwordEntry , newuserEntry,EmailEntry,SecuereQuesEntry,passwordEntrys
     tkWindow = Tk()
-    tkWindow.title("Login Form")
-    tkWindow.geometry("350x320")
+    tkWindow.title("RHSystem-Workers Admistrator")
+    img = Image.open("C://Users//LuisM//OneDrive//Escritorio//GithubCarpets//SystemRH-Workers-Admistrator//Images//login-backround.jpg")
+    resized_img = img.resize((600, 550))
+    bg_img = ImageTk.PhotoImage(resized_img)
+    canvas = Canvas(tkWindow, width=600, height=550)
+    canvas.pack()
+    canvas.create_image(0, 0, image=bg_img, anchor=NW)
     tkWindow.resizable(0,0)
-    tkWindow.configure(bg="light blue")
+    labelprincipal = Label(tkWindow, text="RH-System",bg="light blue",fg="SkyBlue4", font=("Times New Roman", 30, "bold") )
+    labelprincipal.place(x=220,y=30)
     labellogin = Label(tkWindow, text="Login Validation",bg="light blue",fg="SkyBlue4", font=("Courier New", 15, "bold") )
-    labellogin.place(x=80,y=13)
+    labellogin.place(x=70,y=110)
+    labelreg = Label(tkWindow, text="Register User",bg="light blue",fg="SkyBlue4", font=("Courier New", 15, "bold") )
+    labelreg.place(x=400,y=110)
     usernameLabel = Label(tkWindow, text="Username",bg="light blue",fg="gray25", font=("Candara", 12, "bold") )
-    usernameLabel.place(x=125, y=47)    
+    usernameLabel.place(x=120, y=170)    
     usernameEntry = Entry(tkWindow,fg="gray25", font=("Candara", 10, "bold") )
-    usernameEntry.place(x=100, y=80)     
+    usernameEntry.place(x=90, y=210)     
     passwordLabel = Label(tkWindow, text="Password",bg="light blue",fg="gray25", font=("Candara", 12, "bold") )
-    passwordLabel.place(x=127, y=100)    
+    passwordLabel.place(x=120, y=240)    
     passwordEntry = Entry(tkWindow, show='*' , fg="gray25", font=("Candara", 10, "bold") )
-    passwordEntry.place(x=100, y=130)
+    passwordEntry.place(x=90, y=280)
+    usernameLabel = Label(tkWindow, text="New Username",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    usernameLabel.place(x=425, y=160)
+    newuserEntry = Entry(tkWindow,fg="gray25", font=("Candara", 10, "bold") )
+    newuserEntry.place(x=405, y=200)
+    EmailLabel = Label(tkWindow, text="New Email",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    EmailLabel.place(x=435, y=240)
+    EmailEntry = Entry(tkWindow,fg="gray25", font=("Candara", 10, "bold") )
+    EmailEntry.place(x=405, y=280)
+    SecuereQuesLabel = Label(tkWindow, text="You Birth town",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    SecuereQuesLabel.place(x=425, y=310)    
+    SecuereQuesEntry = Entry(tkWindow,fg="gray25", font=("Candara", 10, "bold") )
+    SecuereQuesEntry.place(x=405, y=350)          
+    passwordLabel = Label(tkWindow, text="New Password",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    passwordLabel.place(x=425, y=390)    
+    passwordEntrys = Entry(tkWindow, show='*',fg="gray25", font=("Candara", 10, "bold") )
+    passwordEntrys.place(x=405, y=430)           
     loginButton = Button(tkWindow, text="Login", width=10, height=1, bg="forest green" , fg="white" ,font=("Courier", 10, "bold") , command=login_verification) 
-    loginButton.place(x=110, y=170)
+    loginButton.place(x=110, y=315)
+    regButton = Button(tkWindow, text="Register User +", width=15, height=1, bg="midnight blue",fg="white" ,font=("Courier", 10, "bold"),command=register_verification)
+    regButton.place(x=408, y=470)
     RememberButton = Button(tkWindow, text="Forgot your password", width=20, height=1, bg="firebrick4",fg="white" ,font=("Courier", 10, "bold"), command=Forgot_password_window)
-    RememberButton.place(x=75, y=210)
-    retButton = Button(tkWindow, text="<- Return Menu", width=14, height=1, bg="PaleGreen4",fg="white" ,font=("Courier", 9, "bold") ,command=return_principal_2)
-    retButton.place(x=10, y=260)      
+    RememberButton.place(x=75, y=360)   
     tkWindow.mainloop()
     
-#Register window   
-def register_window():
-    rootw.destroy()
-    global reisterw,newuserEntry,EmailEntry,SecuereQuesEntry,passwordEntry
-    reisterw = Tk()
-    reisterw.title("Register new RH-User")
-    reisterw.geometry("350x350")
-    reisterw.configure(bg="light blue")
-    reisterw.resizable(0,0)
-    labelreg = Label(reisterw, text="Register User",bg="light blue",fg="SkyBlue4", font=("Courier New", 15, "bold") )
-    labelreg.place(x=70,y=11)
-    usernameLabel = Label(reisterw, text="New Username",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
-    usernameLabel.place(x=22, y=50)    
-    newuserEntry = Entry(reisterw,fg="gray25", font=("Candara", 10, "bold") )
-    newuserEntry.place(x=140, y=50)    
-    EmailLabel = Label(reisterw, text="New Email",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
-    EmailLabel.place(x=22, y=90)    
-    EmailEntry = Entry(reisterw,fg="gray25", font=("Candara", 10, "bold") )
-    EmailEntry.place(x=140, y=90)   
-    SecuereQuesLabel = Label(reisterw, text="You Birth town",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
-    SecuereQuesLabel.place(x=22, y=130)    
-    SecuereQuesEntry = Entry(reisterw,fg="gray25", font=("Candara", 10, "bold") )
-    SecuereQuesEntry.place(x=140, y=130)          
-    passwordLabel = Label(reisterw, text="New Password",bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
-    passwordLabel.place(x=22, y=170)    
-    passwordEntry = Entry(reisterw, show='*',fg="gray25", font=("Candara", 10, "bold") )
-    passwordEntry.place(x=140, y=170)        
-    regButton = Button(reisterw, text="Register User +", width=15, height=1, bg="midnight blue",fg="white" ,font=("Courier", 10, "bold"),command=register_verification)
-    regButton.place(x=147, y=210)
-    returnButton = Button(reisterw, text="<- Return Menu",width=14, height=1, bg="PaleGreen4",fg="white" ,font=("Courier", 9, "bold"),command=return_principal)
-    returnButton.place(x=10, y=300)   
-    reisterw.mainloop()
 
 #Forgot password window
 def Forgot_password_window():
@@ -284,9 +252,9 @@ def welcome_window():
     opb4.place(x=20, y=140)
     opb5 = Button(welcomeWindow, text="Add New Worker", width=20, height=3, bg="dark green",fg="white")
     opb5.place(x=180, y=140)
-    opb6 = Button(welcomeWindow, text="Exit", width=20, height=3, bg="dark green",fg="white",command=return_principal_3)
+    opb6 = Button(welcomeWindow, text="Exit", width=20, height=3, bg="dark green",fg="white",command=return_main)
     opb6.place(x=340, y=140)
     welcomeWindow.mainloop()
 
 #Talk principal function 
-principal_window()
+Main_Window()
