@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 #Imported Variables the Security.py
-from Security import secretcode , Email_Master_User, Email_Master_Password,server,database,html
+from Security import *
 
 #Function of Principal window
 def Main_Window():
@@ -61,6 +61,7 @@ def login_verification():
                     messagebox.showerror("LOGIN", "Incorrect login")
         except pyodbc.Error as e:
             messagebox.showerror("ERROR", f"Database error: {e}")
+
 
 # Test window
 def welcome_window():
@@ -112,7 +113,7 @@ def Forgot_password_window():
 
 #Function to validate email, send code and get code window
 def validateEmail():
-    global codeEntry, secretcode, takeemail,Forgotwindow
+    global secretcode, takeemail
     takeemail = EmailEntry.get()
     if len(takeemail) == 0 or "@" not in takeemail:
         messagebox.showerror("Error", "Please enter your correct email adress")
@@ -126,39 +127,50 @@ def validateEmail():
                 if cursor.fetchone() is not None:
                     messagebox.showinfo("Success", "Email found in the system")
                     messagebox.showinfo("Success", "Please check your email for the security code")
-                    forgot_window_1.destroy()
-                    # Window to get the secret code
-                    Forgotwindow = Tk()
-                    Forgotwindow.title("Forgot your Password")
-                    Forgotwindow.geometry("400x300")
-                    Forgotwindow.configure(bg="light blue")
-                    Forgotwindow.resizable(0, 0)
-                    labelprincipal = Label(Forgotwindow, text="RH-System", bg="light blue",fg="SkyBlue4", font=("Times New Roman", 30, "bold"))
-                    labelprincipal.place(x=110, y=30)
-                    codeLabel = Label(Forgotwindow, text="Verificate your Code:",bg="light blue", fg="SkyBlue4", font=("Courier New", 15, "bold"))
-                    codeLabel.place(x=80, y=100)
-                    code1Label = Label(Forgotwindow, text="Enter your secret code here",bg="light blue", fg="gray25", font=("Candara", 12, "bold"))
-                    code1Label.place(x=100, y=150)
-                    codeEntry = Entry(Forgotwindow, fg="gray25", font=("Candara", 12, "bold"))
-                    codeEntry.place(x=100, y=180)
-                    validateButton = Button(Forgotwindow, text="Validate Code", width=15, height=1, bg="forest green", fg="white", font=("Courier", 13, "bold"),command=new_password)
-                    validateButton.place(x=110, y=220)                    
-                    # Process to send the email
-                    msg = MIMEMultipart()
-                    msg.attach(MIMEText(html, 'html'))
-                    msg['From'] = Email_Master_User
-                    msg['To'] = takeemail
-                    msg['Subject'] = 'Code to change password'
-                    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
-                        smtp.starttls()
-                        smtp.login(Email_Master_User,Email_Master_Password)
-                        smtp.send_message(msg)
-                    Forgotwindow.mainloop()
+                    #Talk Window_Validate_Code
+                    Window_Validate_Code()                                             
                 else:
                     messagebox.showerror("Error", "Email not found in the system")
         except pyodbc.Error as e:
             messagebox.showerror("ERROR", f"Database error: {e}")
 
+def Window_Validate_Code():
+    # Window to get the secret code
+    forgot_window_1.destroy()  
+    global codeEntry , Forgotwindow
+    Forgotwindow = Tk()
+    Forgotwindow.title("Forgot your Password")
+    Forgotwindow.geometry("400x300")
+    Forgotwindow.configure(bg="light blue")
+    Forgotwindow.resizable(0, 0)
+    labelprincipal = Label(Forgotwindow, text="RH-System", bg="light blue",fg="SkyBlue4", font=("Times New Roman", 30, "bold"))
+    labelprincipal.place(x=110, y=30)
+    codeLabel = Label(Forgotwindow, text="Verificate your Code:",bg="light blue", fg="SkyBlue4", font=("Courier New", 15, "bold"))
+    codeLabel.place(x=80, y=100)
+    code1Label = Label(Forgotwindow, text="Enter your secret code here",bg="light blue", fg="gray25", font=("Candara", 12, "bold"))
+    code1Label.place(x=100, y=150)
+    codeEntry = Entry(Forgotwindow, fg="gray25", font=("Candara", 12, "bold"))
+    codeEntry.place(x=100, y=180)
+    validateButton = Button(Forgotwindow, text="Validate Code", width=15, height=1, bg="forest green", fg="white", font=("Courier", 13, "bold"),command=new_password)
+    validateButton.place(x=110, y=220)
+    Send_Email()    
+    Forgotwindow.mainloop()
+    #Talk send the email secret code
+          
+# Function to send the email the secret code            
+def Send_Email():
+    print("Email Sent")
+    msg = MIMEMultipart()
+    msg.attach(MIMEText(html, 'html'))
+    msg['From'] = Email_Master_User
+    msg['To'] = takeemail
+    msg['Subject'] = 'Code to change password'
+    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+        smtp.starttls()
+        smtp.login(Email_Master_User,Email_Master_Password)
+        smtp.send_message(msg)
+    
+    
 # Function to create a new password window
 def new_password():
     global newpasswin, newEntry1, newEntry2
