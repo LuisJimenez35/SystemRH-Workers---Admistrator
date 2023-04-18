@@ -26,5 +26,5 @@ CREATE TABLE [dbo].[Workers - Principal Data](
 	[Hiring date] [date] NOT NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-INSERT [dbo].[Users] ([UserName], [Email], [SecurityQuestion], [Pass]) VALUES (N'Admin121', N'luismorajimenez35@gmail.com', N'San Juan', N'RH4050')
+INSERT [dbo].[Users] ([UserName], [Email], [SecurityQuestion], [Pass]) VALUES (N'Admin121', N'luismorajimenez35@gmail.com', N'San Juan', N'RH3090')
 GO
