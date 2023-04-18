@@ -14,3 +14,20 @@ Email_Master_Password = "lgvozquxlykfijaq"
 # Variables for the connection with the database
 server = 'localhost'
 database = 'Db_prueba_py'
+
+# HTML and css format for sending the secret code email
+html = """\
+<html>
+<head></head>
+<body style="background-image: url(NewProject/images/fondo-verde-borroso-de-la-luz-del-extracto-bokeh-brillo-102747021.jpg); background-position: center;">
+    <div class="card" style="margin: 0 auto; text-align: center; align-items: center; background-color: rgb(255, 255, 255); width: 70%; height: 280px; margin-top: 10%;">
+        <br>
+        <h2 style="text-align: start; margin-left: 10%; margin-top: 5; font-size: 123%; color: blue;" >RHSystem/LuisJimenez35</h2>
+        <h3 style="margin-top: 30px; display: inline-block; text-align: center; color: rgb(7, 7, 7); font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ; font-weight: bold; font-size: 140%;">Hello, please enter the following code to recover your password</h3>
+        <br>
+        <hr>
+        <h1 style="color: rgb(51, 94, 214); font-size: 300%; position: relative; top: auto;">"""+secretcode+"""</h1>
+    </div>
+</body>
+</html>
+"""

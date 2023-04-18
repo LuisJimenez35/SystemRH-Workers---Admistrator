@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 #Imported Variables the Security.py
-from Security import secretcode , Email_Master_User, Email_Master_Password,server,database
+from Security import secretcode , Email_Master_User, Email_Master_Password,server,database,html
 
 #Function of Principal window
 def Main_Window():
@@ -142,23 +142,7 @@ def validateEmail():
                     codeEntry = Entry(Forgotwindow, fg="gray25", font=("Candara", 12, "bold"))
                     codeEntry.place(x=100, y=180)
                     validateButton = Button(Forgotwindow, text="Validate Code", width=15, height=1, bg="forest green", fg="white", font=("Courier", 13, "bold"),command=new_password)
-                    validateButton.place(x=110, y=220)
-                    # HTML and css format for sending the secret code email
-                    html = """\
-                    <html>
-                    <head></head>
-                    <body style="background-image: url(NewProject/images/fondo-verde-borroso-de-la-luz-del-extracto-bokeh-brillo-102747021.jpg); background-position: center;">
-                        <div class="card" style="margin: 0 auto; text-align: center; align-items: center; background-color: rgb(255, 255, 255); width: 70%; height: 280px; margin-top: 10%;">
-                            <br>
-                            <h2 style="text-align: start; margin-left: 10%; margin-top: 5; font-size: 123%; color: blue;" >RHSystem/LuisJimenez35</h2>
-                            <h3 style="margin-top: 30px; display: inline-block; text-align: center; color: rgb(7, 7, 7); font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ; font-weight: bold; font-size: 140%;">Hello, please enter the following code to recover your password</h3>
-                            <br>
-                            <hr>
-                            <h1 style="color: rgb(51, 94, 214); font-size: 300%; position: relative; top: auto;">"""+secretcode+"""</h1>
-                        </div>
-                    </body>
-                    </html>
-                    """
+                    validateButton.place(x=110, y=220)                    
                     # Process to send the email
                     msg = MIMEMultipart()
                     msg.attach(MIMEText(html, 'html'))
