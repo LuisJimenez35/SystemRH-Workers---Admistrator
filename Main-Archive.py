@@ -15,9 +15,6 @@ from email.mime.text import MIMEText
 #Imported Variables the Security.py
 from Security import secretcode , Email_Master_User, Email_Master_Password,server,database
 
-
-
-
 #Function of Principal window
 def Main_Window():
     global tkWindow, usernameEntry, passwordEntry,  EmailEntry
