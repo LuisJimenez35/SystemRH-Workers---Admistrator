@@ -12,7 +12,7 @@ import pyodbc
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-#Imported Variables the Security.py
+#Imported the Security.py
 from Security import *
 
 #Function of Principal window
@@ -62,8 +62,7 @@ def login_verification():
         except pyodbc.Error as e:
             messagebox.showerror("ERROR", f"Database error: {e}")
 
-
-# Test window
+#Function of the test window
 def welcome_window():
     global welcomeWindow
     welcomeWindow = Tk()
@@ -111,7 +110,7 @@ def Forgot_password_window():
     EmailButton.place(x=120, y=220)
     forgot_window_1.mainloop()
 
-#Function to validate email, send code and get code window
+#Function to validate email
 def validateEmail():
     global secretcode, takeemail
     takeemail = EmailEntry.get()
@@ -134,6 +133,7 @@ def validateEmail():
         except pyodbc.Error as e:
             messagebox.showerror("ERROR", f"Database error: {e}")
 
+#Function to get the secret code window
 def Window_Validate_Code():
     # Window to get the secret code
     forgot_window_1.destroy()  
@@ -153,10 +153,10 @@ def Window_Validate_Code():
     codeEntry.place(x=100, y=180)
     validateButton = Button(Forgotwindow, text="Validate Code", width=15, height=1, bg="forest green", fg="white", font=("Courier", 13, "bold"),command=new_password)
     validateButton.place(x=110, y=220)
+    #Talk send the email secret code
     Send_Email()    
     Forgotwindow.mainloop()
-    #Talk send the email secret code
-          
+              
 # Function to send the email the secret code            
 def Send_Email():
     print("Email Sent")
@@ -169,7 +169,6 @@ def Send_Email():
         smtp.starttls()
         smtp.login(Email_Master_User,Email_Master_Password)
         smtp.send_message(msg)
-    
     
 # Function to create a new password window
 def new_password():
