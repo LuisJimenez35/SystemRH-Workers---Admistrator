@@ -2,12 +2,9 @@
 from tkinter import *
 import tkinter.messagebox as messagebox
 from tkinter import messagebox
-import random
-import string
 from email.message import EmailMessage
 import smtplib
 import messagebox
-from datetime import date
 import pyodbc
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -159,7 +156,6 @@ def Window_Validate_Code():
               
 # Function to send the email the secret code            
 def Send_Email():
-    print("Email Sent")
     msg = MIMEMultipart()
     msg.attach(MIMEText(html, 'html'))
     msg['From'] = Email_Master_User
@@ -194,45 +190,55 @@ def new_password():
         passwordLabel.place(x=230, y=140)
         newEntry2 = Entry(newpasswin, fg="gray25",font=("Candara", 12, "bold"))
         newEntry2.place(x=210, y=170)
-        changeButton = Button(newpasswin, text="Confirm New Password", width=20, height=1,bg="forest green", fg="white", font=("Courier", 13, "bold"),command=validate_new_password)
+        changeButton = Button(newpasswin, text="Confirm New Password", width=20, height=1,bg="forest green", fg="white", font=("Courier", 13, "bold"),command=validate_obtained_passwords)
         changeButton.place(x=100, y=230)
         newpasswin.mainloop()
 
-# Function to create a new password and replace the old one.
-def validate_new_password():
+# Function to validate the obtained passwords 
+def validate_obtained_passwords():
+    global pass1, pass2
     pass1 = newEntry1.get()
     pass2 = newEntry2.get()
     #Check that the data entered are the same
     if pass1 != pass2:
         messagebox.showerror("Error", "Passwords are not equals")
     else:
+        #Talk take_info_user function for get the user data
+        take_info_user()
+            
+#Function to get the user data with his email address           
+def take_info_user():
+    global valiuser, valicorreo, valisq, valipass
+    try:
+        #Take the user data with his email address
+        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+            cursor = cnxn.cursor()
+            cursor.execute("SELECT * FROM Users WHERE Email=?", (takeemail))
+            for row in cursor.fetchall():
+                valiuser = row[0]
+                valicorreo = row[1]
+                valisq = row[2]
+                valipass = row[3]
+                #Talk update_password function for update the user password
+                update_password()
+    except pyodbc.Error as e:
+            messagebox.showerror("ERROR", f"Database error: {e}")
+            
+#Function to update the user password and validate the old password            
+def update_password():         
+    if pass1 != valipass or pass2 != valipass:
         try:
-            #Take the user data with his email address
             with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                 cursor = cnxn.cursor()
-                cursor.execute("SELECT * FROM Users WHERE Email=?", (takeemail))
-                for row in cursor.fetchall():
-                    valiuser = row[0]
-                    valicorreo = row[1]
-                    valisq = row[2]
-                    valipass = row[3]
+                query = "UPDATE Users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
+                cursor.execute(query, (valicorreo, valisq, pass1, valiuser))
+                cnxn.commit
+                messagebox.showinfo("New Password", "The new password was created successfully")
+                newpasswin.destroy()
         except pyodbc.Error as e:
-            messagebox.showerror("ERROR", f"Database error: {e}")
-        #Check that the new password is not the same as the old one            
-        if pass1 != valipass or pass2 != valipass:
-            try:
-                #Update the new password
-                with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-                    cursor = cnxn.cursor()
-                    query = "UPDATE Users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
-                    cursor.execute(query, (valicorreo, valisq, pass1, valiuser))
-                    cnxn.commit
-                    messagebox.showinfo("New Password", "The new password was created successfully")
-                    newpasswin.destroy()
-            except pyodbc.Error as e:
                 messagebox.showerror("ERROR", f"Database error: {e}")
-        else:
-            messagebox.showerror("Error", "I can't use the old password")
+    else:
+        messagebox.showerror("Error", "I can't use the old password")
 
 # Talk principal function
 Main_Window()

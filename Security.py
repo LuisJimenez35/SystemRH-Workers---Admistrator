@@ -1,7 +1,6 @@
 # Imported Libraries
 import random
 import string
-import pyodbc
 import messagebox
 
 # Variables for the creation of the random code
