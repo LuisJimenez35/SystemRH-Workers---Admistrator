@@ -12,6 +12,7 @@ from email.mime.text import MIMEText
 #Imported the Security.py
 from Security import *
 
+
 #Function of Principal window
 def Main_Window():
     global tkWindow, usernameEntry, passwordEntry,  EmailEntry
