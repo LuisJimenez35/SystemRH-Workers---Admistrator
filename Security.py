@@ -10,7 +10,7 @@ secretcode = ''.join(random.choice(caracters)for _ in range(longitud))
 
 # Variables for the connection with the email
 Email_Master_User = "soportprimeprogram@gmail.com"
-Email_Master_Password = "lgvozquxlykfijaq"
+Email_Master_Password = "pxpigupgrvnshqre"
 
 # Variables for the connection with the database
 server = 'localhost'
