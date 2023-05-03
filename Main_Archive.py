@@ -63,10 +63,10 @@ def login_verification():
 def welcome_window():
     global welcomeWindow
     welcomeWindow = Tk()
-    welcomeWindow.title("Welcome")
+    welcomeWindow.title("light blue")
     welcomeWindow.geometry("510x500")
     welcomeWindow.resizable(0, 0)
-    welcomeWindow.configure(bg="dark slate gray")
+    welcomeWindow.configure(bg="light blue")
     Label(welcomeWindow, text="RH System Administrator",width="300", height=2, bg="gray25", fg="white").pack()
     opb1 = Button(welcomeWindow, text="Workers Availables",width=20, height=3, bg="dark green", fg="white")
     opb1.place(x=20, y=60)
@@ -241,4 +241,4 @@ def update_password():
         messagebox.showerror("Error", "I can't use the old password")
 
 # Talk principal function
-Main_Window()
+welcome_window()
