@@ -68,7 +68,7 @@ def welcome_window():
     welcomeWindow.resizable(0, 0)
     welcomeWindow.configure(bg="light blue")
     Label(welcomeWindow, text="RH System Administrator",width="300", height=2, bg="gray25", fg="white").pack()
-    opb1 = Button(welcomeWindow, text="Workers Availables",width=20, height=3, bg="dark green", fg="white")
+    opb1 = Button(welcomeWindow, text="Workers Availables",width=20, height=3, bg="dark green", fg="white" , command=view_workers_window)
     opb1.place(x=20, y=60)
     opb2 = Button(welcomeWindow, text="Consult Workers",width=20, height=3, bg="dark green", fg="white")
     opb2.place(x=180, y=60)
@@ -238,5 +238,16 @@ def update_password():
     else:
         messagebox.showerror("Error", "I can't use the old password")
 
+#Function to view workers data window
+def view_workers_window():
+    welcomeWindow.destroy()
+    workers_window = Tk()
+    workers_window.title("Workers Data")
+    workers_window.geometry("800x600")
+    workers_window.resizable(0, 0)
+    workers_window.configure(bg="light blue")
+    
+    workers_window.mainloop()
+
 # Talk principal function
-Main_Window()
+welcome_window()
