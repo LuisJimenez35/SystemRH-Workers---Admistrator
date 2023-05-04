@@ -208,7 +208,7 @@ def validate_obtained_passwords():
             
 #Function to get the user data with his email address           
 def take_info_user():
-    global valiuser, valicorreo, valisq, valipass
+    global valiuser,valipass
     try:
         #Take the user data with his email address
         with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
@@ -216,8 +216,6 @@ def take_info_user():
             cursor.execute("SELECT * FROM Users WHERE Email=?", (takeemail))
             for row in cursor.fetchall():
                 valiuser = row[0]
-                valicorreo = row[1]
-                valisq = row[2]
                 valipass = row[3]
                 #Talk update_password function for update the user password
                 update_password()
@@ -230,8 +228,8 @@ def update_password():
         try:
             with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
                 cursor = cnxn.cursor()
-                query = "UPDATE Users SET Email = ?, SecurityQuestion = ?, Pass=? WHERE UserName = ?"
-                cursor.execute(query, (valicorreo, valisq, pass1, valiuser))
+                query = "UPDATE Users SET Pass=? WHERE UserName = ?"
+                cursor.execute(query, (pass1, valiuser))
                 cnxn.commit
                 messagebox.showinfo("New Password", "The new password was created successfully")
                 newpasswin.destroy()
@@ -241,4 +239,4 @@ def update_password():
         messagebox.showerror("Error", "I can't use the old password")
 
 # Talk principal function
-welcome_window()
+Main_Window()
