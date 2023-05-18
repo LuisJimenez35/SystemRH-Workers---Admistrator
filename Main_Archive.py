@@ -63,7 +63,7 @@ def login_verification():
 def welcome_window():
     global welcomeWindow
     welcomeWindow = Tk()
-    welcomeWindow.title("light blue")
+    welcomeWindow.title("Menu RHSystem Administrator")
     welcomeWindow.geometry("510x500")
     welcomeWindow.resizable(0, 0)
     welcomeWindow.configure(bg="light blue")
@@ -76,16 +76,25 @@ def welcome_window():
     opb3.place(x=340, y=60)
     opb4 = Button(welcomeWindow, text="Send an email to worker",width=20, height=3, bg="dark green", fg="white")
     opb4.place(x=20, y=140)
-    opb5 = Button(welcomeWindow, text="Add New Worker", width=20,height=3, bg="dark green", fg="white")
+    opb5 = Button(welcomeWindow, text="Add New Worker", width=20,height=3, bg="dark green", fg="white" , command=add_workers_window)
     opb5.place(x=180, y=140)
-    opb6 = Button(welcomeWindow, text="Exit", width=20, height=3,bg="dark green", fg="white", command=return_main)
+    opb6 = Button(welcomeWindow, text="View all Admins", width=20, height=3,bg="dark green", fg="white")
     opb6.place(x=340, y=140)
+    opb7 = Button(welcomeWindow, text="Exit", width=20, height=3,bg="dark green", fg="white", command=return_main)
+    opb7.place(x=180, y=220)
     welcomeWindow.mainloop()
 
 # Function to return to the main window
 def return_main():
     welcomeWindow.destroy()
     Main_Window()
+    
+    
+#Function to return from the add worker window
+def return_addworkers():
+    addworkers_window.destroy()
+    welcome_window()
+
 
 #Function of the take email window
 def Forgot_password_window():
@@ -249,5 +258,109 @@ def view_workers_window():
     
     workers_window.mainloop()
 
+#Function to add workers window
+def add_workers_window():
+    global addworkers_window, DniEntry, newEmailEntry, newCellphoneEntry, newNameEntry, newLastNameEntry, newAdressEntry, newContragting_DateEntry,newBirthdayEntry, newSalaryEntry, newPositionEntry
+    welcomeWindow.destroy()
+    addworkers_window = Tk()
+    addworkers_window.title("Add Workers")
+    addworkers_window.geometry("700x550")
+    addworkers_window.resizable(0, 0)
+    addworkers_window.configure(bg="light blue")
+    labelprincipal = Label(addworkers_window, text="Add New Workers", bg="light blue",fg="SkyBlue4", font=("Times New Roman", 30, "bold"))
+    labelprincipal.place(x=200, y=20)
+    DniLabel = Label(addworkers_window, text="DNI", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    DniLabel.place(x=100, y=100)
+    DniEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    DniEntry.place(x=30, y=130)
+    newEmailLabel= Label(addworkers_window, text="Email", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newEmailLabel.place(x=330, y=100)
+    newEmailEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newEmailEntry.place(x=250, y=130)
+    newCellphoneLabel= Label(addworkers_window, text="Cellphone", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newCellphoneLabel.place(x=540, y=100)
+    newCellphoneEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newCellphoneEntry.place(x=480, y=130)
+    newNameLabel= Label(addworkers_window, text="Name", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newNameLabel.place(x=100, y=180)
+    newNameEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newNameEntry.place(x=30, y=210)
+    newLastName= Label(addworkers_window, text="Last Name", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newLastName.place(x=300, y=180)
+    newLastNameEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newLastNameEntry.place(x=250, y=210)
+    newAdressLabel= Label(addworkers_window, text="Adress", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newAdressLabel.place(x=540, y=180)
+    newAdressEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newAdressEntry.place(x=480, y=210)
+    newContragting_DateLabel= Label(addworkers_window, text="Contragting Date", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newContragting_DateLabel.place(x=60, y=260)
+    newContragting_DateEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newContragting_DateEntry.place(x=30, y=290)
+    newBirthdayLabel= Label(addworkers_window, text="Birthday", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newBirthdayLabel.place(x=300, y=260)
+    newBirthdayEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newBirthdayEntry.place(x=250, y=290)
+    newPositionLabel= Label(addworkers_window, text="Position", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newPositionLabel.place(x=540, y=260)
+    newPositionEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newPositionEntry.place(x=480, y=290)
+    newSalaryLabel= Label(addworkers_window, text="Salary", bg="light blue",fg="gray25", font=("Candara", 12, "bold"))
+    newSalaryLabel.place(x=310, y=340)
+    newSalaryEntry = Entry(addworkers_window, fg="gray25", font=("Candara", 12, "bold"))
+    newSalaryEntry.place(x=250, y=370)
+    addworkerbtn = Button(addworkers_window, text="Add Worker", width=12, height=1, bg="forest green",fg="white", font=("Courier", 13, "bold"), command=add_new_workers)
+    addworkerbtn.place(x=270, y=420)
+    retrunAddWorkerbtn= Button(addworkers_window, text="Return", width=12, height=1, bg="red3",fg="white", font=("Courier", 13, "bold"), command=return_addworkers)
+    retrunAddWorkerbtn.place(x=270, y=470)
+    addworkers_window.mainloop()
+    
+#Function to add workers (General data)
+def add_new_workers():
+    global Dni, Name, LastName, Position, Salary
+    Dni = DniEntry.get()
+    Name = newNameEntry.get()
+    LastName = newLastNameEntry.get()
+    Position= newPositionEntry.get()
+    Salary = newSalaryEntry.get()
+    
+    try:
+        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+            cursor = cnxn.cursor()
+            cursor.execute(
+                "SELECT * FROM Workers WHERE DNI=?", (Dni))
+            if cursor.fetchone() is not None:
+                messagebox.showerror("ERROR", "Worker already exists")                
+            else:
+                try:
+                    with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+                        cursor = cnxn.cursor()
+                        cursor.execute(
+                            "INSERT INTO Workers (DNI,Name,LastName,Position,Salary) VALUES(?,?,?,?,?)", (Dni,Name,LastName,Position,Salary))
+                        cnxn.commit()
+                        add_new_workers_laboral_data()
+                        messagebox.showinfo("Success", "Worker added successfully")
+                except pyodbc.Error as e:
+                    messagebox.showerror("ERROR", f"Database error: {e}")
+    except pyodbc.Error as e:
+        messagebox.showerror("ERROR", f"Database error: {e}")
+    
+            
+#Function to add workers (Laboral data)
+def add_new_workers_laboral_data():
+    Email = newEmailEntry.get()
+    Cellphone = newCellphoneEntry.get()
+    Adress = newAdressEntry.get()
+    Contragtting_Date = newContragting_DateEntry.get()
+    Birthday = newBirthdayEntry.get()
+    try:
+        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+            cursor = cnxn.cursor()
+            cursor.execute(
+                "INSERT INTO Workers_Information (DNI_Worker,Email_Worker,Cellphone,Adress,Contragting_Date,Birthday) VALUES(?,?,?,?,?,?)", (Dni,Email,Cellphone,Adress,Contragtting_Date,Birthday))
+            cnxn.commit()
+    except pyodbc.Error as e:
+        messagebox.showerror("ERROR", f"Database error: {e}")
+
 # Talk principal function
-welcome_window()
+Main_Window()
