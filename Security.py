@@ -34,3 +34,9 @@ html = """\
 </html>
 """
 
+#Create data the Users automatically
+numero_aleatorio = random.randint(100, 999)
+UserNameCreate = "Admin"+str(numero_aleatorio)
+
+numero_aleatorio2 = random.randint(1000, 9999)
+PasswordCreate = "RH"+str(numero_aleatorio2)

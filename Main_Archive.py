@@ -53,6 +53,7 @@ def login_verification():
                 if cursor.fetchone() is not None:
                     messagebox.showinfo("LOGIN", "Successful login")
                     tkWindow.destroy()
+                    cnxn.close()  
                     welcome_window()
                 else:
                     messagebox.showerror("LOGIN", "Incorrect login")
@@ -154,13 +155,12 @@ def add_workers_window():
     
 #Function to add workers (General data)
 def add_new_workers():
-    global Dni, Name, LastName, Position, Salary
+    global Dni, Name, LastName, Position, Salary 
     Dni = DniEntry.get()
     Name = newNameEntry.get()
     LastName = newLastNameEntry.get()
     Position= newPositionEntry.get()
-    Salary = newSalaryEntry.get()
-    
+    Salary = newSalaryEntry.get()    
     try:
         with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
             cursor = cnxn.cursor()
@@ -177,13 +177,16 @@ def add_new_workers():
                         cnxn.commit()
                         add_new_workers_laboral_data()
                         messagebox.showinfo("Success", "Worker added successfully")
+                        cnxn.close()                                                                         
                 except pyodbc.Error as e:
                     messagebox.showerror("ERROR", f"Database error: {e}")
     except pyodbc.Error as e:
         messagebox.showerror("ERROR", f"Database error: {e}")
+  
                 
 #Function to add workers (Laboral data)
 def add_new_workers_laboral_data():
+    global Email , Adress
     Email = newEmailEntry.get()
     Cellphone = newCellphoneEntry.get()
     Adress = newAdressEntry.get()
@@ -195,9 +198,9 @@ def add_new_workers_laboral_data():
             cursor.execute(
                 "INSERT INTO Workers_Information (DNI_Worker,Email_Worker,Cellphone,Adress,Contragting_Date,Birthday) VALUES(?,?,?,?,?,?)", (Dni,Email,Cellphone,Adress,Contragtting_Date,Birthday))
             cnxn.commit()
+            cnxn.close()  
     except pyodbc.Error as e:
         messagebox.showerror("ERROR", f"Database error: {e}")
-
 
 # Function to return to the main window
 def return_main():
@@ -248,6 +251,7 @@ def validateEmail():
                     messagebox.showinfo("Success", "Email found in the system")
                     messagebox.showinfo("Success", "Please check your email for the security code")
                     #Talk Window_Validate_Code
+                    cnxn.close()  
                     Window_Validate_Code()                                             
                 else:
                     messagebox.showerror("Error", "Email not found in the system")
