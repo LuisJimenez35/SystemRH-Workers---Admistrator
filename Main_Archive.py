@@ -8,6 +8,7 @@ import messagebox
 import pyodbc
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from tkinter import ttk
 
 #Imported the Security.py
 from Security import *
@@ -69,7 +70,7 @@ def welcome_window():
     welcomeWindow.resizable(0, 0)
     welcomeWindow.configure(bg="light blue")
     Label(welcomeWindow, text="RH System Administrator",width="300", height=2, bg="gray25", fg="white").pack()
-    opb1 = Button(welcomeWindow, text="Workers Availables",width=20, height=3, bg="dark green", fg="white" , command=view_workers_window)
+    opb1 = Button(welcomeWindow, text="Workers Availables",width=20, height=3, bg="dark green", fg="white" , command=show_workers)
     opb1.place(x=20, y=60)
     opb2 = Button(welcomeWindow, text="Consult Workers",width=20, height=3, bg="dark green", fg="white")
     opb2.place(x=180, y=60)
@@ -201,6 +202,65 @@ def add_new_workers_laboral_data():
             cnxn.close()  
     except pyodbc.Error as e:
         messagebox.showerror("ERROR", f"Database error: {e}")
+
+#Function to show workers window
+def show_workers():
+    try:
+        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+            cursor = cnxn.cursor()
+            query = "SELECT * FROM Workers;"
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            # Crear la ventana de Tkinter
+            window = Tk()
+            window.title("Datos de la consulta")
+            window.configure(bg="light blue")
+            
+            # Crear un estilo personalizado para los widgets
+            style = ttk.Style(window)
+            style.theme_use("clam")  # Estilo de la tabla
+            style.configure("Custom.Treeview.Heading", background="light blue", foreground="blue", font=("Helvetica", 12, "bold"))
+            style.configure("Custom.Treeview", font=("Helvetica", 12))
+
+            # Crear un Treeview para mostrar los resultados
+            tree = ttk.Treeview(window, columns=[column[0] for column in cursor.description], show="headings", style="Custom.Treeview")
+
+            # Configurar las columnas del Treeview
+            for column in cursor.description:
+                tree.heading(cursor.description.index(column), text=column[0])
+                tree.column(cursor.description.index(column), width=100)
+
+            # Insertar los datos en el Treeview con etiquetas de separación
+            current_dni = None
+            for row in result:
+                values = tuple(str(value) for value in row)
+                dni = row.DNI
+                if dni != current_dni:
+                    # Insertar una etiqueta de separación
+                    tree.insert("", "end", values=["Trabajador siguiente"], tags=("separator",))
+                    current_dni = dni
+                # Insertar los datos del trabajador
+                tree.insert("", "end", values=values)
+
+            # Configurar estilo de la etiqueta de separación
+            tree.tag_configure("separator", background="light blue", font=("Helvetica", 12, "bold"))
+
+            # Empaquetar el Treeview en un Scrollbar
+            scrollbar = ttk.Scrollbar(window, orient="vertical", command=tree.yview)
+            tree.configure(yscroll=scrollbar.set)
+            scrollbar.pack(side="right", fill="y")
+            tree.pack(fill="both", expand=True)
+
+            
+            retrunciewWorkerbtn= Button(window, text="Return", width=12, height=1, bg="red3",fg="white", font=("Courier", 13, "bold"), command=return_addworkers)
+            retrunciewWorkerbtn.place(x=300, y=300)
+            # Ejecutar el bucle principal de Tkinter
+            window.mainloop()
+
+    except pyodbc.Error as e:
+        messagebox.showerror("ERROR", f"Database error: {e}")
+
 
 # Function to return to the main window
 def return_main():
