@@ -23,8 +23,7 @@ Among the requirements that we were asked for are:
     - Smtplib
     - Messagebox
     - Pyodbc
-    - Datetime
-    - ImageTk
     - MIMEText
     - MIMEMultipart
+    - Ttk
 - SQL Server Ver. 19
