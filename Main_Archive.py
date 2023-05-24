@@ -86,17 +86,6 @@ def welcome_window():
     opb7.place(x=180, y=220)
     welcomeWindow.mainloop()
 
-#Function to view workers data window
-def view_workers_window():
-    welcomeWindow.destroy()
-    workers_window = Tk()
-    workers_window.title("Workers Data")
-    workers_window.geometry("800x600")
-    workers_window.resizable(0, 0)
-    workers_window.configure(bg="light blue")
-    
-    workers_window.mainloop()
-
 #Function to add workers window
 def add_workers_window():
     global addworkers_window, DniEntry, newEmailEntry, newCellphoneEntry, newNameEntry, newLastNameEntry, newAdressEntry, newContragting_DateEntry,newBirthdayEntry, newSalaryEntry, newPositionEntry
@@ -183,8 +172,7 @@ def add_new_workers():
                     messagebox.showerror("ERROR", f"Database error: {e}")
     except pyodbc.Error as e:
         messagebox.showerror("ERROR", f"Database error: {e}")
-  
-                
+               
 #Function to add workers (Laboral data)
 def add_new_workers_laboral_data():
     global Email , Adress
@@ -211,68 +199,45 @@ def show_workers():
             query = "SELECT * FROM Workers;"
             cursor.execute(query)
             result = cursor.fetchall()
-
-            # Crear la ventana de Tkinter
             window = Tk()
             window.title("Datos de la consulta")
             window.configure(bg="light blue")
-            
-            # Crear un estilo personalizado para los widgets
             style = ttk.Style(window)
             style.theme_use("clam")  # Estilo de la tabla
             style.configure("Custom.Treeview.Heading", background="light blue", foreground="blue", font=("Helvetica", 12, "bold"))
             style.configure("Custom.Treeview", font=("Helvetica", 12))
-
-            # Crear un Treeview para mostrar los resultados
             tree = ttk.Treeview(window, columns=[column[0] for column in cursor.description], show="headings", style="Custom.Treeview")
-
-            # Configurar las columnas del Treeview
             for column in cursor.description:
                 tree.heading(cursor.description.index(column), text=column[0])
                 tree.column(cursor.description.index(column), width=100)
-
-            # Insertar los datos en el Treeview con etiquetas de separación
             current_dni = None
             for row in result:
                 values = tuple(str(value) for value in row)
                 dni = row.DNI
                 if dni != current_dni:
-                    # Insertar una etiqueta de separación
                     tree.insert("", "end", values=["Trabajador siguiente"], tags=("separator",))
                     current_dni = dni
-                # Insertar los datos del trabajador
                 tree.insert("", "end", values=values)
-
-            # Configurar estilo de la etiqueta de separación
             tree.tag_configure("separator", background="light blue", font=("Helvetica", 12, "bold"))
-
-            # Empaquetar el Treeview en un Scrollbar
             scrollbar = ttk.Scrollbar(window, orient="vertical", command=tree.yview)
             tree.configure(yscroll=scrollbar.set)
             scrollbar.pack(side="right", fill="y")
             tree.pack(fill="both", expand=True)
-
-            
             retrunciewWorkerbtn= Button(window, text="Return", width=12, height=1, bg="red3",fg="white", font=("Courier", 13, "bold"), command=return_addworkers)
             retrunciewWorkerbtn.place(x=300, y=300)
-            # Ejecutar el bucle principal de Tkinter
             window.mainloop()
-
     except pyodbc.Error as e:
         messagebox.showerror("ERROR", f"Database error: {e}")
-
 
 # Function to return to the main window
 def return_main():
     welcomeWindow.destroy()
     Main_Window()
-    
-    
+      
 #Function to return from the add worker window
 def return_addworkers():
     addworkers_window.destroy()
     welcome_window()
-
 
 #Function of the take email window
 def Forgot_password_window():
@@ -425,7 +390,6 @@ def update_password():
                 messagebox.showerror("ERROR", f"Database error: {e}")
     else:
         messagebox.showerror("Error", "I can't use the old password")
-
 
 # Talk principal function
 Main_Window()
