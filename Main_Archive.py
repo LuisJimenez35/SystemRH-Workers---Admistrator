@@ -54,7 +54,6 @@ def login_verification():
                 if cursor.fetchone() is not None:
                     messagebox.showinfo("LOGIN", "Successful login")
                     tkWindow.destroy()
-                    cnxn.close()  
                     welcome_window()
                 else:
                     messagebox.showerror("LOGIN", "Incorrect login")
@@ -89,7 +88,6 @@ def welcome_window():
 #Function to add workers window
 def add_workers_window():
     global addworkers_window, DniEntry, newEmailEntry, newCellphoneEntry, newNameEntry, newLastNameEntry, newAdressEntry, newContragting_DateEntry,newBirthdayEntry, newSalaryEntry, newPositionEntry
-    welcomeWindow.destroy()
     addworkers_window = Tk()
     addworkers_window.title("Add Workers")
     addworkers_window.geometry("700x550")
@@ -150,46 +148,50 @@ def add_new_workers():
     Name = newNameEntry.get()
     LastName = newLastNameEntry.get()
     Position= newPositionEntry.get()
-    Salary = newSalaryEntry.get()    
-    try:
-        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-            cursor = cnxn.cursor()
-            cursor.execute(
-                "SELECT * FROM Workers WHERE DNI=?", (Dni))
-            if cursor.fetchone() is not None:
-                messagebox.showerror("ERROR", "Worker already exists")                
-            else:
-                try:
-                    with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-                        cursor = cnxn.cursor()
-                        cursor.execute(
-                            "INSERT INTO Workers (DNI,Name,LastName,Position,Salary) VALUES(?,?,?,?,?)", (Dni,Name,LastName,Position,Salary))
-                        cnxn.commit()
-                        add_new_workers_laboral_data()
-                        messagebox.showinfo("Success", "Worker added successfully")
-                        cnxn.close()                                                                         
-                except pyodbc.Error as e:
-                    messagebox.showerror("ERROR", f"Database error: {e}")
-    except pyodbc.Error as e:
-        messagebox.showerror("ERROR", f"Database error: {e}")
+    Salary = newSalaryEntry.get()
+    if len(Dni) == 0 or len(Name) == 0 or len(LastName) == 0 or len(Position) == 0 or len(Salary) == 0 :
+        messagebox.showerror("ERROR", "Please fill all the entrys")
+    else:          
+        try:
+            with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+                cursor = cnxn.cursor()
+                cursor.execute(
+                    "SELECT * FROM Workers WHERE DNI=?", (Dni))
+                if cursor.fetchone() is not None:
+                    messagebox.showerror("ERROR", "Worker already exists")                
+                else:
+                    try:
+                        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+                            cursor = cnxn.cursor()
+                            cursor.execute(
+                                "INSERT INTO Workers (DNI,Name,LastName,Position,Salary) VALUES(?,?,?,?,?)", (Dni,Name,LastName,Position,Salary))
+                            cnxn.commit()
+                            add_new_workers_laboral_data()
+                            messagebox.showinfo("Success", "Worker added successfully")                                                                    
+                    except pyodbc.Error as e:
+                        messagebox.showerror("ERROR", f"Database error: {e}")
+        except pyodbc.Error as e:
+            messagebox.showerror("ERROR", f"Database error: {e}")
                
 #Function to add workers (Laboral data)
 def add_new_workers_laboral_data():
-    global Email , Adress
+    global Email , Adress , Contragtting_Date , Birthday , Cellphone
     Email = newEmailEntry.get()
     Cellphone = newCellphoneEntry.get()
     Adress = newAdressEntry.get()
     Contragtting_Date = newContragting_DateEntry.get()
     Birthday = newBirthdayEntry.get()
-    try:
-        with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
-            cursor = cnxn.cursor()
-            cursor.execute(
-                "INSERT INTO Workers_Information (DNI_Worker,Email_Worker,Cellphone,Adress,Contragting_Date,Birthday) VALUES(?,?,?,?,?,?)", (Dni,Email,Cellphone,Adress,Contragtting_Date,Birthday))
-            cnxn.commit()
-            cnxn.close()  
-    except pyodbc.Error as e:
-        messagebox.showerror("ERROR", f"Database error: {e}")
+    if "@" not in Email:
+        messagebox.showerror("ERROR", "Please enter a valid email")
+    else:  
+        try:
+            with pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;") as cnxn:
+                cursor = cnxn.cursor()
+                cursor.execute(
+                    "INSERT INTO Workers_Information (DNI_Worker,Email_Worker,Cellphone,Adress,Contragting_Date,Birthday) VALUES(?,?,?,?,?,?)", (Dni,Email,Cellphone,Adress,Contragtting_Date,Birthday))
+                cnxn.commit()
+        except pyodbc.Error as e:
+            messagebox.showerror("ERROR", f"Database error: {e}")
 
 #Function to show workers window
 def show_workers():
@@ -200,30 +202,34 @@ def show_workers():
             cursor.execute(query)
             result = cursor.fetchall()
             window = Tk()
-            window.title("Datos de la consulta")
+            window.title("All workers data")
+            window.geometry("1000x500")
             window.configure(bg="light blue")
+            window.resizable(False, False)
             style = ttk.Style(window)
             style.theme_use("clam")  # Estilo de la tabla
-            style.configure("Custom.Treeview.Heading", background="light blue", foreground="blue", font=("Helvetica", 12, "bold"))
-            style.configure("Custom.Treeview", font=("Helvetica", 12))
+            style.configure("Custom.Treeview.Heading", background="light blue", foreground="Black", font=("Candara", 12, "bold"))
+            style.configure("Custom.Treeview", font=("Candara", 12 , "bold") )
             tree = ttk.Treeview(window, columns=[column[0] for column in cursor.description], show="headings", style="Custom.Treeview")
             for column in cursor.description:
                 tree.heading(cursor.description.index(column), text=column[0])
-                tree.column(cursor.description.index(column), width=100)
+                tree.column(cursor.description.index(column), width=200)
+                tree.column(cursor.description.index(column), anchor="center")
+                tree.column(cursor.description.index(column), stretch=False)
             current_dni = None
             for row in result:
                 values = tuple(str(value) for value in row)
                 dni = row.DNI
                 if dni != current_dni:
-                    tree.insert("", "end", values=["Trabajador siguiente"], tags=("separator",))
+                    tree.insert("", "end", values=[""], tags=("separator",))
                     current_dni = dni
                 tree.insert("", "end", values=values)
-            tree.tag_configure("separator", background="light blue", font=("Helvetica", 12, "bold"))
+            tree.tag_configure("separator", background="royal blue", font=("Candara", 12, "bold"))
             scrollbar = ttk.Scrollbar(window, orient="vertical", command=tree.yview)
             tree.configure(yscroll=scrollbar.set)
             scrollbar.pack(side="right", fill="y")
             tree.pack(fill="both", expand=True)
-            retrunciewWorkerbtn= Button(window, text="Return", width=12, height=1, bg="red3",fg="white", font=("Courier", 13, "bold"), command=return_addworkers)
+            retrunciewWorkerbtn= Button(window, text="Return", width=12, height=1, bg="red3",fg="white", font=("Candara", 13, "bold"), command=return_addworkers)
             retrunciewWorkerbtn.place(x=300, y=300)
             window.mainloop()
     except pyodbc.Error as e:
@@ -276,7 +282,6 @@ def validateEmail():
                     messagebox.showinfo("Success", "Email found in the system")
                     messagebox.showinfo("Success", "Please check your email for the security code")
                     #Talk Window_Validate_Code
-                    cnxn.close()  
                     Window_Validate_Code()                                             
                 else:
                     messagebox.showerror("Error", "Email not found in the system")
@@ -392,4 +397,4 @@ def update_password():
         messagebox.showerror("Error", "I can't use the old password")
 
 # Talk principal function
-Main_Window()
+add_workers_window()
