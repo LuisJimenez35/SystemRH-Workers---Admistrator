@@ -397,4 +397,4 @@ def update_password():
         messagebox.showerror("Error", "I can't use the old password")
 
 # Talk principal function
-add_workers_window()
+Main_Window()
