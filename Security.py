@@ -3,7 +3,6 @@ import random
 import string
 import messagebox
 
-
 # Variables for the creation of the random code
 caracters = string.ascii_letters + string.digits
 longitud = 6

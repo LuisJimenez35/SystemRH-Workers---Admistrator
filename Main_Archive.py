@@ -193,6 +193,10 @@ def add_new_workers_laboral_data():
         except pyodbc.Error as e:
             messagebox.showerror("ERROR", f"Database error: {e}")
 
+#Function to make user automatically with the position of the worker
+def maker_user_worker():
+    
+
 #Function to show workers window
 def show_workers():
     try:
