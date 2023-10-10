@@ -15,8 +15,8 @@ Among the requirements that we were asked for are:
 ```
 - Authentication control
   - For the company security is very important so we are asked to create an account automatically or manually to manage the SystemRH-Workers-Admistrator for those workers in the Human Resources area.
-```
   - Option to recover password with two-factor authentication with SystemRH-Workers-Admistrator manager data.
+```
 ## 💻 Software Available:
 - Python Ver. 3.11
   - Libraries Used:
